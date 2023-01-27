@@ -128,8 +128,6 @@ public class Driver {
         }
 
         writer.close();
-
-        System.out.println("\nAll Employees clocked in. Please review status file for more info.");
     }
 }
 
