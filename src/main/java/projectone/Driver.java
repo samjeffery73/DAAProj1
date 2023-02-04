@@ -1,27 +1,27 @@
 /**
  * @author SJ
  * 26 January 2023
- *
+ * <p>
  * Driver file for DAA Project 1 EC
- *
+ * <p>
  * This program is called the 'Sapphire Access System."
  * It uses a hashMap to store Employees who work for a 'secure' company.
  * To clock in, the employee must type a 'secure' four digit code.
  * Employees names are given from a text file called names.txt
- *
+ * <p>
  * If you type an incorrect code three times, the system acts
  * as if it is being infiltrated, and shuts down.
- *
+ * <p>
  * After clocking in, your name is stored to a LinkedList, and is written to a text file status.txt
  * which shows if you have clocked in or not.
- *
+ * <p>
  * If you have not, you are marked in the status file as LATE.
- *
+ * <p>
  * (For testing purposes, i have hardcoded a 'LATE' employee.)
- *
  */
 
 package projectone;
+
 import java.io.*;
 import java.util.*;
 
@@ -60,11 +60,11 @@ public class Driver {
         map.put(late.hashCode(), late);
 
         /** For Debugging purposes
-                System.out.println("steve " + steve.hashCode()); // 1199
-                System.out.println("marge " + marge.hashCode()); // 2272
-                System.out.println("jane " + jane.hashCode()); // 1251
-                System.out.println("Late Guy " + late.hashCode()); // 2872
-        **/
+         System.out.println("steve " + steve.hashCode()); // 1199
+         System.out.println("marge " + marge.hashCode()); // 2272
+         System.out.println("jane " + jane.hashCode()); // 1251
+         System.out.println("Late Guy " + late.hashCode()); // 2872
+         **/
 
         // blank employee to get the employee value from the map
         Employee e = new Employee(null, null, false);
@@ -100,10 +100,9 @@ public class Driver {
                 }
 
 
-            }
-            else {
+            } else {
                 failedAttempts++;
-                System.err.println("No Employee with such access code exists. Try again. Tries remaining: " + (3 - failedAttempts ));
+                System.err.println("No Employee with such access code exists. Try again. Tries remaining: " + (3 - failedAttempts));
 
             }
 

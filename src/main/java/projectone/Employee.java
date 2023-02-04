@@ -1,10 +1,9 @@
 /**
  * @author SJ
  * 26 January 2023
- *
+ * <p>
  * An Employee object has a name, id, and a boolean. From each Employee's id, a hashcode is created to allow
  * 'clocking in.'
- *
  */
 
 package projectone;
@@ -26,7 +25,7 @@ public class Employee {
     // this is not  'good' hashcode method, i just wanted to illustrate that i am familiar with hashcodes
     public int hashCode() {
 
-        String firstFour = id.substring(0,4);
+        String firstFour = id.substring(0, 4);
 
         int result = Integer.parseInt(firstFour) + 17;
 
