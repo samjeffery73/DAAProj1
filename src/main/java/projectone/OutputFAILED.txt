@@ -1,0 +1,13 @@
+
+Welcome, please enter your Sapphire Access Code to clock in.
+1234
+Welcome, please enter your Sapphire Access Code to clock in.
+No Employee with such access code exists. Try again. Tries remaining 2
+1234
+No Employee with such access code exists. Try again. Tries remaining 1
+Welcome, please enter your Sapphire Access Code to clock in.
+1234
+No Employee with such access code exists. Try again. Tries remaining 0
+You have failed 3 times and the system has been locked. Goodbye.
+
+Process finished with exit code 0

@@ -1,0 +1,13 @@
+Welcome, please enter your Sapphire Access Code to clock in.
+1199
+Hello Steven Jobbers! Access has been granted and you have clocked in!
+Welcome, please enter your Sapphire Access Code to clock in.
+2272
+Hello Marge Simpson! Access has been granted and you have clocked in!
+Welcome, please enter your Sapphire Access Code to clock in.
+1251
+Hello Jane Doe! Access has been granted and you have clocked in!
+
+
+
+Process finished with exit code 0
