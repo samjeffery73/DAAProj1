@@ -1,14 +1,14 @@
 package projecttwo;
 
 import java.io.IOException;
-import java.util.*;
+
 public class Driver {
 
 
     public static void main(String args[]) throws IOException {
 
 
-        Clause c1 = new Clause("s5");
+        Formula c1 = new Formula("s5");
 
 
 
