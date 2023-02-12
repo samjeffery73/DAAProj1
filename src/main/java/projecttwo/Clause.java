@@ -21,12 +21,19 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 
+
+
 public class Clause {
 
     int vars;
-    int clauses;
+    int statements;
+    int next;
     String filename;
-    List<Integer> list = new ArrayList<Integer>();
+    Scanner fileScan = null;
+    String line;
+
+    List<Integer> intList = new ArrayList<Integer>();
+    List<ArrayList<Clauses>> list = new ArrayList<ArrayList<Clauses>>();
 
     // The file with the names of the e
 
@@ -35,48 +42,88 @@ public class Clause {
 
      checkFile(filename);
 
-
-
-
     }
 
     public void checkFile(String filename) throws FileNotFoundException {
 
         File readFile = new File("C:/Users/njhdt/OneDrive/Desktop/Rowan Files/DAA/DAAProjects/src/main/java/projecttwo/" + filename + ".cnf");
 
-        Scanner fileScan = null;
+
+
+        try {
+            fileScan = new Scanner(readFile);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        line = fileScan.nextLine();
 
 
 
-            try {
-                fileScan = new Scanner(readFile);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        String line = fileScan.nextLine();
-            
-        while (fileScan.hasNext()) {
 
-
-            if (line.contains("c")) {
-
+            if (line.contains("c ")) {
                 line = fileScan.nextLine();
             }
 
+            if (line.contains("p cnf")) {
 
-                vars = fileScan.nextInt();
+                line = line.replaceAll("[^0-9]"," ");
 
-                clauses = fileScan.nextInt();
+                line = line.replaceAll(" + ", " ");
 
-                System.out.print(vars);
+                setParams();
 
-                System.out.print(clauses);
+                next = fileScan.nextInt();
 
 
         }
+
+            while (fileScan.hasNext()) {
+
+                intList.add(next);
+
+                next = fileScan.nextInt();
+
+
+
+
+            }
+
+
+
+        System.out.println(intList);
+
     }
 
-    public void scanFile() {
+    public void setParams() {
+
+        String[] nums = line.replaceAll("^\\D+","").split("\\D+");
+
+        vars = Integer.parseInt(nums[0]);
+
+        statements = Integer.parseInt(nums[1]);
+
+        System.out.println("Number of variables: " + vars);
+        System.out.println("Number of statements: " + statements);
+
+
+    }
+
+    public void makeClauses() {
+
+        int counter = 0;
+
+        for (int i = 0; i < statements; i++) {
+
+            counter++;
+
+
+            String[] clauseNames = {"c" + (statements - (statements - counter))};
+
+
+
+
+        }
 
 
     }
