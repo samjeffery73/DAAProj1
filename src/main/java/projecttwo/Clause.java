@@ -1,3 +1,21 @@
+/**
+ * @author SJ
+ *
+ * @date 13 Feb, 2023
+ *
+ * The Clause class takes a list of Variables as a parameter.
+ *
+ * From this list, it creates a list of lists that store the variables from the input and throws away zeroes.
+ *
+ * The finished output of creating a clause is a series of varying size lists of variables.
+ *
+ * This file will likely be renamed.
+ *
+ *
+ *
+ *
+ */
+
 package projecttwo;
 
 import java.util.*;
@@ -9,8 +27,10 @@ public class Clause {
     ArrayList<List<Variable>> doubleList = new ArrayList<List<Variable>>();
     List<Variable> newList = new ArrayList<Variable>();
 
-    int cursor = 0;
+    int cursor;
     int val;
+
+    boolean truth = false;
 
     public Clause(List<Variable> list) {
 
@@ -18,12 +38,12 @@ public class Clause {
 
         while (it.hasNext()) {
 
-            Variable val = list.get(cursor);
+            Variable val = list.get(0);
 
             if (!(val.value == 0)) {
 
                 newList.add(val);
-                list.remove(cursor);
+                list.remove(0);
 
             }
 
@@ -43,7 +63,6 @@ public class Clause {
 
         doubleList.add(newList);
 
-
         System.out.println("List of clauses: " + doubleList);
 
         solve();
@@ -52,19 +71,23 @@ public class Clause {
 
     public void solve() {
 
-
         System.out.println("Solving formula...");
 
-
-        for (int i = 0; i < doubleList.size(); i++) {
-
+      Iterator<List<Variable>> it = doubleList.iterator();
 
 
-
+      List<Variable> temp = it.next();
 
 
 
-        }
+
+
+
+
+
+
+
+
 
 
 
