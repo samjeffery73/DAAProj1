@@ -32,10 +32,8 @@ public class Formula {
     Scanner fileScan = null;
     String line;
 
-    List<Integer> intList = new ArrayList<Integer>();
-    List<ArrayList<Clause>> list = new ArrayList<ArrayList<Clause>>();
+    List<Variable> varList = new ArrayList<Variable>();
 
-    // The file with the names of the e
 
 
     public Formula(String filename) throws FileNotFoundException {
@@ -48,49 +46,47 @@ public class Formula {
 
         File readFile = new File("C:/Users/njhdt/OneDrive/Desktop/Rowan Files/DAA/DAAProjects/src/main/java/projecttwo/" + filename + ".cnf");
 
-
-
         try {
             fileScan = new Scanner(readFile);
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
 
         line = fileScan.nextLine();
 
 
-
         if (line.contains("c ")) {
+
             line = fileScan.nextLine();
-        }
-
-            if (line.contains("p cnf")) {
-
-                line = line.replaceAll("[^0-9]"," ");
-
-                line = line.replaceAll(" + ", " ");
-
-                setParams();
-
-                next = fileScan.nextInt();
-
 
         }
 
-            while (fileScan.hasNext()) {
+        if (line.contains("p cnf")) {
 
-                intList.add(next);
+            line = line.replaceAll("[^0-9]"," ");
 
-                next = fileScan.nextInt();
+            line = line.replaceAll(" + ", " ");
+
+            setParams();
+
+            next = fileScan.nextInt();
+
+        }
+
+        while (fileScan.hasNext()) {
+
+            varList.add(new Variable(next));
+            next = fileScan.nextInt();
+
+        }
 
 
-            }
+        System.out.println("List of ALL values in file " + filename + ".cnf " + varList);
 
 
-
-        System.out.println(intList);
-            System.out.println("Making clauses...");
-            makeClauses();
+        System.out.println("Making clauses...");
+        Clause c = new Clause(varList);
 
 
     }
@@ -109,17 +105,13 @@ public class Formula {
 
     }
 
-    public void makeClauses() {
-
-        Clause c = new Clause(intList);
 
 
 
 
-        }
 
 
-    }
+}
 
 
 

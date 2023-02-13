@@ -6,30 +6,21 @@ import java.util.*;
 
 public class Clause {
 
+    ArrayList<List<Variable>> doubleList = new ArrayList<List<Variable>>();
+    List<Variable> newList = new ArrayList<Variable>();
 
+    int cursor = 0;
+    int val;
 
+    public Clause(List<Variable> list) {
 
-
-
-    public Clause(List<Integer> list) {
-        int cursor = 0;
-        int val;
-
-
-        ArrayList<List<Integer>> doubleList = new ArrayList<List<Integer>>();
-        List<Integer> newList = new ArrayList<Integer>();
-
-        Iterator<Integer> it = list.iterator();
-
-
-
-
+        Iterator<Variable> it = list.iterator();
 
         while (it.hasNext()) {
 
-            val = list.get(cursor);
+            Variable val = list.get(cursor);
 
-            if (!(val == 0)) {
+            if (!(val.value == 0)) {
 
                 newList.add(val);
                 list.remove(cursor);
@@ -39,15 +30,12 @@ public class Clause {
 
             else {
 
-                List<Integer> temp = new ArrayList<Integer>(newList);
-
+                List<Variable> temp = new ArrayList<Variable>(newList);
                 doubleList.add(temp);
                 newList.clear();
                 list.remove(cursor);
 
             }
-
-
 
 
         }
@@ -56,14 +44,28 @@ public class Clause {
         doubleList.add(newList);
 
 
+        System.out.println("List of clauses: " + doubleList);
 
-
-        System.out.println(doubleList);
+        solve();
     }
 
-    public String toString() {
 
-       return "";
+    public void solve() {
+
+
+        System.out.println("Solving formula...");
+
+
+        for (int i = 0; i < doubleList.size(); i++) {
+
+
+
+
+
+
+
+        }
+
 
 
 
