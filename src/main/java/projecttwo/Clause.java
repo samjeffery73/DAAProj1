@@ -52,15 +52,8 @@ public class Clause {
 
         }
 
-        if (!it.hasNext() && newList.size() != 0) {
 
-            List<Integer> temp = new ArrayList<Integer>(newList);
-
-            doubleList.add(temp);
-            newList.clear();
-            list.remove(cursor);
-        }
-
+        doubleList.add(newList);
 
 
 
