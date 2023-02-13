@@ -9,6 +9,8 @@ public class Clause {
 
 
 
+
+
     public Clause(List<Integer> list) {
         int cursor = 0;
         int val;
@@ -17,9 +19,13 @@ public class Clause {
         ArrayList<List<Integer>> doubleList = new ArrayList<List<Integer>>();
         List<Integer> newList = new ArrayList<Integer>();
 
+        Iterator<Integer> it = list.iterator();
 
 
-        while (!list.isEmpty()) {
+
+
+
+        while (it.hasNext()) {
 
             val = list.get(cursor);
 
@@ -39,16 +45,21 @@ public class Clause {
                 newList.clear();
                 list.remove(cursor);
 
-
             }
-
-
 
 
 
 
         }
 
+        if (!it.hasNext() && newList.size() != 0) {
+
+            List<Integer> temp = new ArrayList<Integer>(newList);
+
+            doubleList.add(temp);
+            newList.clear();
+            list.remove(cursor);
+        }
 
 
 
