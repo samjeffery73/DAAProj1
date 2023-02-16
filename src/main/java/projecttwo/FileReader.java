@@ -5,12 +5,13 @@
  *
  *
  *
- * The FileReader class reads the file, gets the parameters (# of variables and # of statements)
+ * The FileReader class reads the file, gets the parameters (# of variables and # of clauses)
  * And then creates a Formula.
  *
  *
  *
  */
+
 
 
 package projecttwo;
@@ -23,9 +24,9 @@ import java.util.*;
 
 
 public class FileReader {
-
-    int vars;
-    int statements;
+    final long startTime = System.nanoTime();
+    int variables;
+     int clauses;
     int next;
     String filename;
     Scanner fileScan = null;
@@ -40,7 +41,7 @@ public class FileReader {
     public FileReader(String filename) throws FileNotFoundException {
 
      checkFile(filename);
-     Formula f = new Formula(null);
+     Formula f = new Formula(null, 0, 0);
 
 
 
@@ -48,7 +49,9 @@ public class FileReader {
 
     public void checkFile(String filename) throws FileNotFoundException {
 
-        File readFile = new File("C:/Users/njhdt/OneDrive/Desktop/Rowan Files/DAA/DAAProjects/src/main/java/projecttwo/" + filename + ".cnf");
+        // hardcoded Filename, needs revision
+        File readFile = new File("C:/Users/njhdt/Desktop/ROWAN CS 1 BOOKS/sem3/daa_inputs/" + filename + ".cnf");
+      //  File readFile = new File("C:/Users/njhdt/OneDrive/Desktop/Rowan Files/DAA/DAAProjects/src/main/java/projecttwo/" + filename + ".cnf");
 
         try {
             fileScan = new Scanner(readFile);
@@ -65,6 +68,8 @@ public class FileReader {
             line = fileScan.nextLine();
 
         }
+
+        // getting all the values
 
         if (line.contains("p cnf")) {
 
@@ -86,11 +91,9 @@ public class FileReader {
         }
 
 
-        System.out.println("List of ALL values in file " + filename + ".cnf " + fullList);
+        System.out.println("Generating formula...");
+        Formula f = new Formula(fullList, variables, clauses);
 
-
-        System.out.println("Making clauses...");
-        Formula f = new Formula(fullList);
 
 
     }
@@ -99,12 +102,11 @@ public class FileReader {
 
         String[] nums = line.replaceAll("^\\D+","").split("\\D+");
 
-        vars = Integer.parseInt(nums[0]);
+        variables = Integer.parseInt(nums[0]);
 
-        statements = Integer.parseInt(nums[1]);
+        clauses = Integer.parseInt(nums[1]);
 
-        System.out.println("Number of variables: " + vars);
-        System.out.println("Number of statements: " + statements);
+
 
 
     }

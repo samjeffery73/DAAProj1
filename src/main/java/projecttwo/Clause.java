@@ -28,9 +28,6 @@ public class Clause {
 
         this.clause = new ArrayList<Variable>(list);
 
-        System.out.println(clause);
-
-
 
         }
 

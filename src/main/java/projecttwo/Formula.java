@@ -31,11 +31,20 @@ public class Formula {
     List<Variable> newList = new ArrayList<Variable>();
 
     int cursor;
-    int val;
+
+
+    int variables;
+
+    int clauses;
 
     boolean truth = false;
 
-    public Formula(List<Variable> list) {
+    public Formula(List<Variable> list, int variables, int clauses) {
+
+        this.clauses = clauses;
+
+        this.variables = variables;
+
 
         Iterator<Variable> it = list.iterator();
 
@@ -73,15 +82,43 @@ public class Formula {
 
         System.out.println("List of clauses: " + clauseList);
 
+
+
+
+
         solve();
     }
 
 
     public void solve() {
-
         System.out.println("Solving formula...");
 
-      Iterator<Clause> it = clauseList.iterator();
+        Iterator<Clause> it = clauseList.iterator();
+        Clause c = it.next();
+        System.out.println("Number of clauses: " + clauses);
+        System.out.println("Number of clauses: " + variables);
+
+
+        for (int i = 1; i < variables-1; i++) {
+
+            Variable v = new Variable(i);
+            List
+        }
+
+
+
+        for (int i = 0; i < clauses; i++) {
+
+
+
+
+
+
+
+
+      }
+
+
 
 
 
