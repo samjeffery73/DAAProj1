@@ -91,19 +91,29 @@ public class Formula {
 
 
     public void solve() {
+
+
         System.out.println("Solving formula...");
+
+        // creating a new list to keep track of the T/F values of the n amount of variables in the formula.
+        List<Variable> vList = new ArrayList<Variable>();
+
 
         Iterator<Clause> it = clauseList.iterator();
         Clause c = it.next();
         System.out.println("Number of clauses: " + clauses);
         System.out.println("Number of clauses: " + variables);
 
-
-        for (int i = 1; i < variables-1; i++) {
+// a loop adding
+        for (int i = 1; i == variables; i++) {
 
             Variable v = new Variable(i);
-            List
+
+
+            vList.add(v);
         }
+
+        System.out.println(vList);
 
 
 
