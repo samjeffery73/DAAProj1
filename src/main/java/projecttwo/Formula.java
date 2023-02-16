@@ -1,13 +1,16 @@
 /**
+ * Formula.java
+ *
  * @author SJ
  *
  * @date 13 Feb, 2023
  *
- * The Clause class takes a list of Variables as a parameter.
+ * The Formula class takes a FULL list of Variables as a parameter (with zeros from the file included).
+ * Then, it stores the variables that ARENT zero and generates clauses.
  *
- * From this list, it creates a list of lists that store the variables from the input and throws away zeroes.
+ * From this list, it generates Clauses. From those clauses, it forms a
+ * list of clauses.
  *
- * The finished output of creating a clause is a series of varying size lists of variables.
  *
  * This file will likely be renamed.
  *

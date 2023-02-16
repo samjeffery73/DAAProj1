@@ -1,15 +1,13 @@
 /**
- * Formula.java
+ * FileReader.java
  * @author SJ
  * @date 4 Feb. 2023
  *
- * A formula is a list of clauses. This is currently NOT what it is in my project.
  *
- * The Formula class reads the file, gets the parameters (# of variables and # of statements)
- * And then creates a Clause object, which is actually just a FORMULA. Which I have come to realize. This project is
- * a mess at the moment.
  *
- * This class will likely be renamed.
+ * The FileReader class reads the file, gets the parameters (# of variables and # of statements)
+ * And then creates a Formula.
+ *
  *
  *
  */
