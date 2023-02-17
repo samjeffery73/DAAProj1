@@ -20,13 +20,13 @@ import java.util.*;
 
 public class Clause {
 
-    List<Variable> clause = new ArrayList<Variable>();
+    List<Variable> list = new ArrayList<Variable>();
 
     boolean truth = false;
 
     public Clause(List<Variable> list) {
 
-        this.clause = new ArrayList<Variable>(list);
+        this.list = new ArrayList<Variable>(list);
 
 
         }
@@ -35,17 +35,15 @@ public class Clause {
 
 
 
-    public void test(){
 
-
-
-    }
 
     public String toString() {
 
-        return clause.toString();
+        return list.toString();
 
     }
+
+
 
 
 

@@ -28,7 +28,19 @@ import java.util.*;
 public class Formula {
 
     ArrayList<Clause> clauseList = new ArrayList<Clause>();
-    List<Variable> newList = new ArrayList<Variable>();
+
+
+    // creating a new list to keep track of the T/F values of the n amount of variables in the formula.
+    ArrayList<Variable> vList = new ArrayList<Variable>();
+
+
+    List<Variable> noZeroList = new ArrayList<Variable>();
+
+    Variable var;
+
+    Variable clauseVar;
+
+    Clause clause;
 
     int cursor;
 
@@ -54,18 +66,15 @@ public class Formula {
 
             if (!(val.value == 0)) {
 
-                newList.add(val);
+                noZeroList.add(val);
                 list.remove(0);
 
-            }
+            } else {
 
-
-            else {
-
-                List<Variable> temp = new ArrayList<Variable>(newList);
+                List<Variable> temp = new ArrayList<Variable>(noZeroList);
                 Clause c = new Clause(temp);
                 clauseList.add(c);
-                newList.clear();
+                noZeroList.clear();
                 list.remove(cursor);
 
             }
@@ -74,16 +83,14 @@ public class Formula {
         }
 
 
+        Clause c = new Clause(noZeroList);
 
+        List<Variable> emptyList = new ArrayList<Variable>();
 
-        Clause c = new Clause(newList);
 
         clauseList.add(c);
 
         System.out.println("List of clauses: " + clauseList);
-
-
-
 
 
         solve();
@@ -95,46 +102,153 @@ public class Formula {
 
         System.out.println("Solving formula...");
 
-        // creating a new list to keep track of the T/F values of the n amount of variables in the formula.
-        List<Variable> vList = new ArrayList<Variable>();
+        // counter for variables
+        int counter = 0;
 
+        int clauseCounter = 0;
 
-        Iterator<Clause> it = clauseList.iterator();
-        Clause c = it.next();
+        // an iterator to keep track of all of our clauses in the formula.
+        Iterator<Clause> cListIt = clauseList.iterator();
+        Clause clause = cListIt.next();
+
+        // an iterator to keep track of the variables within each clause
+        Iterator<Variable> clauseVarIt = clause.list.iterator();
+        Variable clauseVar = clauseVarIt.next();
+
         System.out.println("Number of clauses: " + clauses);
         System.out.println("Number of clauses: " + variables);
 
-// a loop adding
-        for (int i = 1; i == variables; i++) {
+
+        // start of the algo, while our formula is false (which it starts out as)
+
+
+        // a loop adding all variables (TRUE) to vList
+        for (int i = 1; i < variables + 1; i++) {
 
             Variable v = new Variable(i);
 
-
             vList.add(v);
+
         }
 
-        System.out.println(vList);
+        System.out.println(vList.toString());
 
-
-
-        for (int i = 0; i < clauses; i++) {
-
-
-
-
-
-
-
-
-      }
+        // END of variable list
+        Variable x = new Variable(0);
+        vList.add(x);
 
 
 
 
 
+        // an iterator for our total list of variables, in which the program will use to brute force
+        Iterator<Variable> vListIt = vList.iterator();
+        Variable var = vListIt.next();
+
+
+        while (clauseCounter < clauses) {
+
+
+            // end of vList, go to the next entry
+            if (var.value == 0) {
+
+                vListIt = vList.listIterator();
+
+            }
+
+            // no more comparisons for this variable, go to next variable in the clause and start comparing.
+            if (counter == (vList.size() - 1)) {
+
+                counter = -1;
+
+                clauseVar = clauseVarIt.next();
+
+                // no more comparisons in the clause, we know that the clause is FALSE
+                // the entire formula is also FALSE. Program will still continue to gather data.
+
+                if (!(clauseVarIt.hasNext())) {
+
+                    clause.truth = false;
+
+                    truth = false;
+
+                    System.out.println(clause.toString() + " " + clause.truth);
+
+                    clause = cListIt.next();
+
+                    clauseVarIt = clause.list.listIterator();
+
+                    clauseVar = clauseVarIt.next();
+
+                    vListIt = vList.iterator();
+
+                    counter = -1;
+                    clauseCounter++;
+
+
+                }
+
+
+            }
+
+
+            // we found one, wipe all of our entries. This clause is true.
+            if (clauseVar.equals(var)) {
+
+                clauseCounter++;
+
+                clause.truth = true;
+
+                System.out.println(clause.toString() + " " + clause.truth);
+
+                if (!(clauseCounter == clauses)) {
+
+                    clause = cListIt.next();
+
+                    clauseVarIt = clause.list.listIterator();
+
+                    clauseVar = clauseVarIt.next();
+
+                    vListIt = vList.iterator();
+
+                    counter = -1;
 
 
 
+                }
+
+
+
+
+            }
+
+
+
+
+            // increment the counter, so we know when all variables in vList have been compared to one variable in the
+            // clause. Go to the next variable
+
+
+            counter++;
+            var = vListIt.next();
+
+
+        }
+
+
+        if (truth == false) {
+
+
+            System.out.println("Formula is NOT SAT. Resolving...");
+
+        }
+
+
+
+        // wiping the clauseList again
+        cListIt = clauseList.listIterator();
+
+        // iterating through the clauses to find one that is false
 
 
 
@@ -145,6 +259,18 @@ public class Formula {
 
     }
 
+
+
+
+
+
+    private boolean test() {
+
+
+        return true;
+
+
+    }
 
 
 

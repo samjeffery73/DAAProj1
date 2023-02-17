@@ -44,6 +44,26 @@ public class Variable {
     }
 
 
+    public boolean equals(Variable var) {
+
+        if (var.value == this.value) {
+
+            return true;
+
+        }
+
+        if (var == null) {
+
+            return false;
+        }
+
+        return false;
+
+
+
+    }
+
+
 
 
 }
