@@ -33,6 +33,9 @@ public class Formula {
     // creating a new list to keep track of the T/F values of the n amount of variables in the formula.
     ArrayList<Variable> vList = new ArrayList<Variable>();
 
+    // Creating a HashMap that will store variable assignments so that they will not be run more than once.
+    Map<Integer, ArrayList<Variable>> variableMap = new HashMap<Integer, ArrayList<Variable>>();
+
 
     List<Variable> noZeroList = new ArrayList<Variable>();
 
@@ -53,6 +56,8 @@ public class Formula {
     int variables;
 
     int clauses;
+
+    int assignments;
 
     boolean truth = false;
 
@@ -228,6 +233,9 @@ public class Formula {
 
         if (!truth) {
 
+            // full truths are at index 0 of variablemap
+            variableMap.put(0, vList);
+
             clauseCounter = 0;
 
             reSolve();
@@ -251,16 +259,9 @@ public class Formula {
 
 
 
-
-
-
-
-
-
-
     private void reSolve() {
 
-
+        ArrayList<Variable> aList = new ArrayList<Variable>(vList);
         // new instance of vList, we will be editing it.
         Iterator<Variable> vListIt = vList.iterator();
         var = vListIt.next();
@@ -286,9 +287,13 @@ public class Formula {
 
                 while (clauseVarIt.hasNext()) {
 
-                    if (clauseVar.value == var.value - (2 * var.value)) {
+                    // If the value of the clauseVariable is of opposite sign, and this variable was not recently swapped
+                    if (clauseVar.value == var.value - (2 * var.value) && !((vList.get(vList.indexOf(var))).justSwapped) ){
 
-                        vList.set(vList.indexOf(var), clauseVar);
+                        // Set the variable assignment to same as clause Variable
+                        aList.set(vList.indexOf(var), clauseVar);
+
+                        aList.get(vList.indexOf(clauseVar)).justSwapped = true;
 
                         var = clauseVar;
 
@@ -320,12 +325,25 @@ public class Formula {
                 }
 
 
+
             clause = cListIt.next();
 
             }
 
 
 
+        // if our map already has this combo, we want to make a new one
+        if (variableMap.containsValue(aList)) {
+
+            reSolve();
+
+        }
+
+        variableMap.put(assignments++, aList);
+
+
+
+        // otherwise, we try our formula again
         solve();
 
         }
