@@ -128,16 +128,16 @@ public class Formula {
         System.out.println("Solving formula...");
 
         // an iterator to keep track of all of our clauses in the formula.
-        Iterator<Clause> cListIt = clauseList.iterator();
+        Iterator<Clause> cListIt = clauseList.listIterator();
         Clause clause = cListIt.next();
 
         // an iterator to keep track of the variables within each clause
-        Iterator<Variable> clauseVarIt = clause.list.iterator();
+        Iterator<Variable> clauseVarIt = clause.list.listIterator();
         Variable clauseVar = clauseVarIt.next();
 
 
         // an iterator for our total list of variables, in which the program will use to brute force
-        Iterator<Variable> vListIt = vList.iterator();
+        Iterator<Variable> vListIt = vList.listIterator();
         Variable var = vListIt.next();
 
 
@@ -224,6 +224,24 @@ public class Formula {
 
         }
 
+
+
+        if (!truth) {
+
+            clauseCounter = 0;
+
+            reSolve();
+
+
+
+        }
+
+        else
+
+            System.out.println("Formula: " + this.toString() + " is true with assignment " + vList.toString());
+
+
+
     }
 
 
@@ -256,9 +274,13 @@ public class Formula {
         clauseVar = clauseVarIt.next();
 
         // iterate through the list of clauses, find one that is false
-        for (int i = 0; i < clauseList.size(); i++) {
+        while (cListIt.hasNext()) {
 
-            if (clause.truth == false) {
+            if (!clause.truth) {
+
+                clauseVarIt = clause.list.listIterator();
+
+                clauseVar = clauseVarIt.next();
 
                 // find the value that is false
 
@@ -266,8 +288,13 @@ public class Formula {
 
                     if (clauseVar.value == var.value - (2 * var.value)) {
 
-
                         vList.set(vList.indexOf(var), clauseVar);
+
+                        var = clauseVar;
+
+                        clauseVarIt = clause.list.listIterator();
+
+                        vListIt = vList.listIterator();
 
 
                         break;
@@ -287,17 +314,19 @@ public class Formula {
 
                     }
 
-                break;
+
 
 
                 }
 
 
-            }
-
             clause = cListIt.next();
 
+            }
 
+
+
+        solve();
 
         }
 

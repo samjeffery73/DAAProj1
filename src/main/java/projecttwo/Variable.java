@@ -19,6 +19,8 @@ public class Variable {
 
     boolean truth;
 
+    boolean justSwapped;
+
     int value;
 
     public Variable(int value) {

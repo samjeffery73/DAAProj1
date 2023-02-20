@@ -48,8 +48,8 @@ public class FileReader {
     public void checkFile(String filename) throws FileNotFoundException {
 
         // hardcoded Filename, needs revision
-       File readFile = new File("C:/Users/njhdt/Desktop/ROWAN CS 1 BOOKS/sem3/daa_inputs/" + filename + ".cnf");
-       //File readFile = new File("C:/Users/njhdt/OneDrive/Desktop/Rowan Files/DAA/DAAProjects/src/main/java/projecttwo/" + filename + ".cnf");
+       //File readFile = new File("C:/Users/njhdt/Desktop/ROWAN CS 1 BOOKS/sem3/daa_inputs/" + filename + ".cnf");
+       File readFile = new File("C:/Users/njhdt/OneDrive/Desktop/Rowan Files/DAA/DAAProjects/src/main/java/projecttwo/" + filename + ".cnf");
 
         try {
             fileScan = new Scanner(readFile);
@@ -103,8 +103,6 @@ public class FileReader {
         variables = Integer.parseInt(nums[0]);
 
         clauses = Integer.parseInt(nums[1]);
-
-
 
 
     }
