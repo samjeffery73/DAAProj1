@@ -52,6 +52,8 @@ public class Formula {
 
     int clauseCounter = 0;
 
+    int mapCounter = -1;
+
 
     int variables;
 
@@ -106,10 +108,10 @@ public class Formula {
         System.out.println("Number of variables: " + variables);
 
 
-        // a loop adding all variables (TRUE) to vList
+        // a loop adding all variables (FALSE) to vList
         for (int i = 1; i < variables + 1; i++) {
 
-            Variable v = new Variable(i);
+            Variable v = new Variable(i - (i * 2));
 
             vList.add(v);
 
@@ -132,6 +134,7 @@ public class Formula {
 
         System.out.println("Solving formula...");
 
+
         // an iterator to keep track of all of our clauses in the formula.
         Iterator<Clause> cListIt = clauseList.listIterator();
         Clause clause = cListIt.next();
@@ -141,7 +144,7 @@ public class Formula {
         Variable clauseVar = clauseVarIt.next();
 
 
-        // an iterator for our total list of variables, in which the program will use to brute force
+        // an iterator for our list of assignments, in which the program will use to brute force
         Iterator<Variable> vListIt = vList.listIterator();
         Variable var = vListIt.next();
 
@@ -190,9 +193,6 @@ public class Formula {
             }
 
 
-
-
-
             // we found one, wipe all of our entries. This clause is true.
             if (clauseVar.equals(var)) {
 
@@ -233,12 +233,12 @@ public class Formula {
 
         if (!truth) {
 
-            // full truths are at index 0 of variablemap
-            variableMap.put(0, vList);
+            // full false are at index 0 of variableMap
+            variableMap.put(mapCounter++, vList);
 
             clauseCounter = 0;
 
-            reSolve();
+            nextAssignment();
 
 
 
@@ -252,13 +252,35 @@ public class Formula {
 
     }
 
+    private void nextAssignment() {
+
+
+
+        for (int i = 0; i < vList.size(); i++) {
+
+            // If the value is the last in the list, and the binary value is 0 (it is false)
+
+            if (vList.indexOf(vList.get(i)) == vList.size() - 1 && vList.get(i).binaryVal == 0) {
+
+                vList.get(i).binaryVal = 1;
+
+
+            }
 
 
 
 
 
+        }
+
+    }
 
 
+/**
+ *
+ * METHOD CURRENTLY NOT BEING USED. WILL BE REMOVED.
+ *
+ *
     private void reSolve() {
 
         ArrayList<Variable> aList = new ArrayList<Variable>(vList);
@@ -350,7 +372,7 @@ public class Formula {
 
 
 
-
+**/
     }
 
 

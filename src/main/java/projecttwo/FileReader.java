@@ -83,6 +83,14 @@ public class FileReader {
 
         while (fileScan.hasNext()) {
 
+
+            // Checking to see if there are other comment lines in the input, not just at the start.
+            if (line.contains("c ")) {
+
+                line = fileScan.nextLine();
+
+            }
+
             fullList.add(new Variable(next));
             next = fileScan.nextInt();
 

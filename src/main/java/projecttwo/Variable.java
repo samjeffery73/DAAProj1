@@ -22,17 +22,23 @@ public class Variable {
     boolean justSwapped;
 
     int value;
+    int binaryVal;
 
     public Variable(int value) {
 
         this.value = value;
 
-        if (value < 0)
+        if (value < 0) {
             truth = false;
+            binaryVal = 0;
 
-        else
+
+        }
+        if (value > 0 ) {
             truth = true;
+            binaryVal = 1;
 
+        }
 
 
     }
