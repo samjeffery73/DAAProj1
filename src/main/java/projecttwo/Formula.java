@@ -117,12 +117,10 @@ public class Formula {
 
         }
 
-        // End of vList
-        Variable x = new Variable(0);
 
         System.out.println(vList.toString());
 
-        vList.add(x);
+
 
 
         solve();
@@ -152,7 +150,7 @@ public class Formula {
         while (clauseCounter < clauses) {
 
             // end of vList, go to the next entry
-            if (var.value == 0) {
+            if (!vListIt.hasNext()) {
 
                 vListIt = vList.listIterator();
 
@@ -254,18 +252,29 @@ public class Formula {
 
     private void nextAssignment() {
 
+        Variable tempVar = new Variable(0);
+
+        List<Variable> tempList = new ArrayList<Variable>(vList);
 
 
-        for (int i = 0; i < vList.size(); i++) {
+        for (int i = 0; i < tempList.size(); i++) {
+
+            tempVar = tempList.get(i);
+
 
             // If the value is the last in the list, and the binary value is 0 (it is false)
 
-            if (vList.indexOf(vList.get(i)) == vList.size() - 1 && vList.get(i).binaryVal == 0) {
+          if (tempList.indexOf(tempVar) == tempList.size() - 1 && (tempVar.binaryVal == 0)) {
 
-                vList.get(i).binaryVal = 1;
+              tempVar = new Variable(tempVar.value * -1);
+
+              tempList.set(i, tempVar);
 
 
-            }
+
+          }
+
+
 
 
 
