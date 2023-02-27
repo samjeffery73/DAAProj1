@@ -63,6 +63,8 @@ public class Formula {
 
     boolean truth = false;
 
+    boolean finishedTesting = false;
+
     public Formula(List<Variable> list, int variables, int clauses) {
 
         this.clauses = clauses;
@@ -130,6 +132,8 @@ public class Formula {
     public void solve() {
 
 
+        System.out.println("Using Assigments: " + vList);
+
         System.out.println("Solving formula...");
 
 
@@ -163,7 +167,7 @@ public class Formula {
 
                 // no more comparisons in the clause, we know that the clause is FALSE
                 // the entire formula is also FALSE. Program will still continue to gather data.
-                if (clause.list.indexOf(clauseVar) + 1 == clause.list.size()) {
+                if (clause.list.indexOf(clauseVar) == (clause.list.size() - 1 )) {
 
 
                     clause.truth = false;
@@ -172,7 +176,6 @@ public class Formula {
 
                     System.out.println(clause.toString() + " " + clause.truth);
 
-                    clause = cListIt.next();
 
                     clauseVarIt = clause.list.listIterator();
 
@@ -183,8 +186,13 @@ public class Formula {
                     counter = -1;
                     clauseCounter++;
 
+                    break;
+
+
+
 
                 } else
+
                     clauseVar = clauseVarIt.next();
 
 
@@ -197,8 +205,6 @@ public class Formula {
                 clauseCounter++;
 
                 clause.truth = true;
-
-                System.out.println(clause.toString() + " " + clause.truth);
 
                 if (!(clauseCounter == clauses)) {
 
@@ -213,6 +219,10 @@ public class Formula {
                     counter = -1;
 
                 }
+
+                else
+
+                    truth = true;
 
 
             }
@@ -229,9 +239,11 @@ public class Formula {
 
 
 
-        if (!truth) {
+        // if the size is not yet 2^n, and truth is also still false,
+        if (!finishedTesting && !truth) {
 
             // full false are at index 0 of variableMap
+            // adding assignments to map
             variableMap.put(mapCounter++, vList);
 
             clauseCounter = 0;
@@ -242,9 +254,24 @@ public class Formula {
 
         }
 
-        else
+        // if the size of the map is 2^n, the formula is NOT satisfiable.
+        if (variableMap.size() == (2 << clauses) - 1 ) {
 
-            System.out.println("Formula: " + this.toString() + " is true with assignment " + vList.toString());
+            System.out.println(this.toString() + " is NOT satisfiable.");
+
+            truth = false;
+
+            boolean finishedTesting = true;
+
+
+        }
+
+
+
+
+            truth = true;
+
+            System.out.println("Formula is true with assignment " + vList.toString());
 
 
 
@@ -254,134 +281,92 @@ public class Formula {
 
         Variable tempVar = new Variable(0);
 
-        List<Variable> tempList = new ArrayList<Variable>(vList);
-
-
-        for (int i = 0; i < tempList.size(); i++) {
-
-            tempVar = tempList.get(i);
-
-
-            // If the value is the last in the list, and the binary value is 0 (it is false)
-
-          if (tempList.indexOf(tempVar) == tempList.size() - 1 && (tempVar.binaryVal == 0)) {
-
-              tempVar = new Variable(tempVar.value * -1);
-
-              tempList.set(i, tempVar);
-
-
-
-          }
+        // New assignment list, tempList, which is Vlist to binary plus one.
+        ArrayList<Variable> tempList = new ArrayList<Variable>(vList);
 
 
 
 
 
+        addOne();
 
 
-        }
+        solve();
 
     }
 
 
-/**
- *
- * METHOD CURRENTLY NOT BEING USED. WILL BE REMOVED.
- *
- *
-    private void reSolve() {
+    private void addOne() {
 
-        ArrayList<Variable> aList = new ArrayList<Variable>(vList);
-        // new instance of vList, we will be editing it.
-        Iterator<Variable> vListIt = vList.iterator();
-        var = vListIt.next();
+        int tempCounter = 0;
 
-        // wiping the clauseList again
-        Iterator<Clause> cListIt = clauseList.listIterator();
-        clause = cListIt.next();
+        ArrayList<Variable> tempList = new ArrayList<Variable>(vList);
 
-        // wiping the stored clause variable list again
-        Iterator<Variable> clauseVarIt = clause.list.listIterator();
-        clauseVar = clauseVarIt.next();
-
-        // iterate through the list of clauses, find one that is false
-        while (cListIt.hasNext()) {
-
-            if (!clause.truth) {
-
-                clauseVarIt = clause.list.listIterator();
-
-                clauseVar = clauseVarIt.next();
-
-                // find the value that is false
-
-                while (clauseVarIt.hasNext()) {
-
-                    // If the value of the clauseVariable is of opposite sign, and this variable was not recently swapped
-                    if (clauseVar.value == var.value - (2 * var.value) && !((vList.get(vList.indexOf(var))).justSwapped) ){
-
-                        // Set the variable assignment to same as clause Variable
-                        aList.set(vList.indexOf(var), clauseVar);
-
-                        aList.get(vList.indexOf(clauseVar)).justSwapped = true;
-
-                        var = clauseVar;
-
-                        clauseVarIt = clause.list.listIterator();
-
-                        vListIt = vList.listIterator();
+        Variable tempVar = new Variable(0);
 
 
-                        break;
-
-                    }
-
-                    if (var.value == 0) {
-
-                        vListIt = vList.listIterator();
-                        clauseVar = clauseVarIt.next();
+        // Iterate starting at the LAST value of the list.
+        ListIterator<Variable> tempListIterator = tempList.listIterator(tempList.size() - 1);
 
 
-                    }
-
-                    var = vListIt.next();
 
 
-                    }
+
+        tempVar = tempListIterator.next();
 
 
+        //Right most 0, flip it to a 1
+        // All the 1s to the right, turns to 0s
+
+        while (tempListIterator.hasPrevious() || tempListIterator.hasNext()) {
+
+            // if the previous value is = 0, and the value before that one is also not a 1,
+            if (tempVar.binaryVal == 0) {
+
+                // flip the sign, set the binary value to 1, making variable true.
+                tempList.set(tempList.indexOf(tempVar), new Variable (tempVar.value * -1));
+
+                vList = tempList;
+
+                break;
+
+            }
+
+            // if the value is a 1, set == 0, go BACK one value.
+                if (tempVar.binaryVal == 1) {
+
+                    tempCounter++;
+
+                    tempList.set(tempList.indexOf(tempVar), new Variable ((tempVar.value * -1)));
+
+
+
+                }
+
+                while (tempCounter >= 0) {
+
+                    tempVar = tempListIterator.previous();
+                    tempCounter--;
 
 
                 }
 
 
 
-            clause = cListIt.next();
-
-            }
 
 
 
-        // if our map already has this combo, we want to make a new one
-        if (variableMap.containsValue(aList)) {
-
-            reSolve();
-
-        }
-
-        variableMap.put(assignments++, aList);
-
-
-
-        // otherwise, we try our formula again
-        solve();
 
         }
 
 
 
-**/
+
+
+
+    }
+
+
     }
 
 

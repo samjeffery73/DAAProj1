@@ -61,26 +61,6 @@ public class FileReader {
         line = fileScan.nextLine();
 
 
-        if (line.contains("c ")) {
-
-            line = fileScan.nextLine();
-
-        }
-
-        // getting all the values
-
-        if (line.contains("p cnf")) {
-
-            line = line.replaceAll("[^0-9]"," ");
-
-            line = line.replaceAll(" + ", " ");
-
-            setParams();
-
-            next = fileScan.nextInt();
-
-        }
-
         while (fileScan.hasNext()) {
 
 
@@ -88,6 +68,20 @@ public class FileReader {
             if (line.contains("c ")) {
 
                 line = fileScan.nextLine();
+
+            }
+
+            // getting all the values
+
+            if (line.contains("p cnf")) {
+
+                line = line.replaceAll("[^0-9]"," ");
+
+                line = line.replaceAll(" + ", " ");
+
+                setParams();
+
+                next = fileScan.nextInt();
 
             }
 

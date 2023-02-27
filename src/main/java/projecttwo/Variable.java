@@ -19,7 +19,7 @@ public class Variable {
 
     boolean truth;
 
-    boolean justSwapped;
+    boolean lastZero = false;
 
     int value;
     int binaryVal;

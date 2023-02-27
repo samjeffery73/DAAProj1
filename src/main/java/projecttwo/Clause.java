@@ -24,6 +24,8 @@ public class Clause {
 
     boolean truth = false;
 
+
+
     public Clause(List<Variable> list) {
 
         this.list = new ArrayList<Variable>(list);
