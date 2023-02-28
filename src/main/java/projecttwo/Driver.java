@@ -10,24 +10,6 @@ public class Driver {
 
       FileReader f1 = new FileReader("s28");
 
-     // FileReader f2 = new FileReader("s15");
-
-    // FileReader f3 = new FileReader("s28");
-
-      // FileReader uf1 = new FileReader("u15");
-
-       // FileReader uf2 = new FileReader("u20");
-
-      //  FileReader uf3 = new FileReader("u29");
-
-
-
-
-
-
-
-
-
 
 
     }

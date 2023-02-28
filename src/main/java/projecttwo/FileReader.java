@@ -101,7 +101,7 @@ public class FileReader {
 
         fileScan.close();
 
-        System.out.println("Generating formula...");
+        System.out.println("Solving formula " + filename);
         Formula f = new Formula(fullList, variables, clauses);
 
 

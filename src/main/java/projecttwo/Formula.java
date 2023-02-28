@@ -113,12 +113,8 @@ public class Formula {
         List<Variable> emptyList = new ArrayList<Variable>();
 
 
-        // Empty clause, still not sure if i'll be using this
+        // Empty clause, for iteration
         clauseList.add(c);
-
-        System.out.println("List of clauses: " + clauseList);
-        System.out.println("Number of clauses: " + clauses);
-        System.out.println("Number of variables: " + variables);
 
 
         // a loop adding all variables (FALSE) to vList
@@ -146,9 +142,7 @@ public class Formula {
     }
 
 
-    public void solve() {
-
-
+    public int solve() {
 
 
         // an iterator to keep track of all of our clauses in the formula.
@@ -165,6 +159,7 @@ public class Formula {
         Variable var = vListIt.next();
 
 
+
         while (clauseCounter < clauses) {
 
             if (truth) {
@@ -174,7 +169,7 @@ public class Formula {
             }
 
 
-            // end of vList, go to the next entry
+            // No next value in assignment list, start from scratch.
             if (!vListIt.hasNext()) {
 
                 vListIt = vList.listIterator();
@@ -194,7 +189,6 @@ public class Formula {
                     clause.truth = false;
 
                     truth = false;
-
 
 
                     clauseVarIt = clause.list.listIterator();
@@ -267,13 +261,21 @@ public class Formula {
 
 
         // if the size of the map is 2^n, the formula is NOT satisfiable.
-        if (variableList.size() == (2 << variables) ) {
+        if (variableList.size() == (1 << variables) ) {
+
+            long endTime = System.currentTimeMillis() - startTime;
 
             System.out.println("Formula is NOT satisfiable.");
 
             truth = false;
 
             finishedTesting = true;
+
+            System.out.println("Computed in: " + endTime + " ms");
+
+            return 0;
+
+
 
 
 
@@ -307,8 +309,12 @@ public class Formula {
 
             System.out.println("Formula is true. Time taken: " + endTime + " ms");
 
+            return 1;
+
 
         }
+
+        return 1;
 
 
     }
