@@ -1,0 +1,149 @@
+
+/**
+
+DAA PROJECT 2
+
+Sam Jeffery
+
+28 Feb, 2023
+
+README provides information about methods used, and a sample output.
+
+**/
+
+
+
+
+
+METHODS:
+FileReader.java
+/**
+     *
+     * Checks a file to see if its valid. If it is,
+     *
+     * Iterate through the file, ignoring comment lines, gathering parameters, and putting all integers into a list.
+     *
+     * (I know that this is slower. My project would have greatly improved if I changed this, but due to time constraints and systems being built upon this,
+     * I wasn't able to fix without restructuring entire project.)
+     *
+     * File path is hardcoded, and should be adjusted to the given path.
+     *
+     * @param filename
+     * @throws FileNotFoundException
+     */
+    public void checkFile(String filename)
+  
+  
+   /**
+     *
+     * pre: line containing "p cnf"
+     *
+     * post: creates the parameters of the given input file.
+     *
+     * # of variables, and # of clauses.
+     *
+     */
+
+    public void setParams() {
+    
+    
+    
+   Variable.java
+   
+   
+     /**
+     * Determine if two variables are equal by looking at their value.
+     * 
+     * @param var
+     * @return true, if the values are equal.
+     *
+     */
+    public boolean equals(Variable var) {
+    
+    
+    
+    Formula.java
+    
+    /**
+     *
+     * Solves a formula by iterating through the variables in a clause, and comparing them to the variables in an assignment.
+     *
+     * If at least one variable matches, the clause is true.
+     * If no variables match, the clause is false.
+     *
+     * If one clause is false, the entire list of assignments does not work for the formula, thus making it the formula false and
+     * having to generate the next Assignment.
+     *
+     *
+     * @return 0 or 1, to break out of the method.
+     */
+
+    public int solve() {
+    
+     /**
+     *
+     * Get the next assignment, and recursively call solve.
+     *
+     *
+     * @return
+     */
+     
+    private void nextAssignment() {
+    
+    
+    
+     /**
+     *
+     * Generate the next assignment by doing binary addition, i.e.
+     *
+     * starting at 0000000
+     *
+     * 00000001
+     *
+     * 00000010
+     *
+     * 00000011... etc
+     *
+     */
+
+    private void addOne() {
+    
+    
+    
+    
+    
+    Program works as intended.
+    
+    Known bugs: None
+    
+    SAMPLE OUTPUT BELOW
+    =====================================
+    
+    
+Satisfiables:
+ ============
+Solving formula s5
+Formula is SAT. Time taken: 1 ms
+[-1, -2, 3, 4, 5]
+Solving formula s15
+Formula is SAT. Time taken: 3 ms
+[-1, -2, -3, -4, -5, -6, -7, -8, -9, -10, 11, -12, 13, -14, -15]
+Solving formula s20
+Formula is SAT. Time taken: 1873 ms
+[1, -2, -3, -4, -5, 6, 7, 8, 9, -10, -11, -12, 13, -14, 15, 16, 17, 18, -19, 20]
+Solving formula s28
+Formula is SAT. Time taken: 239734 ms
+[1, -2, -3, -4, -5, -6, 7, 8, 9, 10, 11, -12, -13, 14, 15, 16, -17, -18, 19, -20, -21, 22, -23, 24, 25, 26, -27, 28]
+
+Non Sats: 
+ ==============
+Solving formula u15
+Formula is NOT satisfiable.
+Computed in: 61 ms
+Solving formula u20
+Formula is NOT satisfiable.
+Computed in: 3864 ms
+Solving formula u27
+Computed in: 227116 ms
+
+    
