@@ -61,6 +61,8 @@ public class Formula {
     int mapCounter = 0;
 
 
+    long startTime;
+
     int variables;
 
     int clauses;
@@ -72,6 +74,9 @@ public class Formula {
     boolean finishedTesting = false;
 
     public Formula(List<Variable> list, int variables, int clauses) {
+
+
+        startTime = System.currentTimeMillis();
 
         this.clauses = clauses;
 
@@ -126,11 +131,6 @@ public class Formula {
         }
 
 
-
-
-
-
-        solve();
 
 
         while (!finishedTesting){
@@ -300,11 +300,12 @@ public class Formula {
 
         else {
 
+            long endTime = (System.currentTimeMillis() - startTime);
             truth = true;
 
             finishedTesting = true;
 
-            System.out.println("Formula is true with assignment " + vList.toString());
+            System.out.println("Formula is true. Time taken: " + endTime + " ms");
 
 
         }
