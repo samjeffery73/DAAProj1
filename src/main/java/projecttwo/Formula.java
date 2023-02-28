@@ -41,6 +41,10 @@ public class Formula {
     ArrayList<ArrayList<Variable>> variableList = new ArrayList<ArrayList<Variable>>();
 
 
+    List<Variable>emptyList = new ArrayList<Variable>();
+
+    Clause zeroClause = new Clause(emptyList);
+
     List<Variable> noZeroList = new ArrayList<Variable>();
 
     Variable var;
@@ -110,7 +114,6 @@ public class Formula {
 
         Clause c = new Clause(noZeroList);
 
-        List<Variable> emptyList = new ArrayList<Variable>();
 
 
         // Empty clause, for iteration
@@ -149,6 +152,9 @@ public class Formula {
         cListIt = clauseList.listIterator();
         clause = cListIt.next();
 
+
+
+
         // an iterator to keep track of the variables within each clause
         Iterator<Variable> clauseVarIt = clause.list.listIterator();
         Variable clauseVar = clauseVarIt.next();
@@ -161,6 +167,10 @@ public class Formula {
 
 
         while (clauseCounter < clauses) {
+
+
+
+
 
             if (truth) {
 
@@ -223,6 +233,15 @@ public class Formula {
                 if (!(clauseCounter == clauses)) {
 
                     clause = cListIt.next();
+
+                    if (clause.list.size() == 0) {
+
+                        cListIt.remove();
+
+                        clause = cListIt.next();
+                    }
+
+
 
                     clauseVarIt = clause.list.listIterator();
 
