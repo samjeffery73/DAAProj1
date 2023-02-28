@@ -38,12 +38,13 @@ public class Formula {
     ListIterator<Variable> vListIterator = vList.listIterator();
 
     // Creating a HashMap that will store variable assignments so that they will not be run more than once.
-    ArrayList<ArrayList<Variable>> variableList = new ArrayList<ArrayList<Variable>>();
+
+    int totalTested = 0;
 
 
     List<Variable>emptyList = new ArrayList<Variable>();
 
-    Clause zeroClause = new Clause(emptyList);
+
 
     List<Variable> noZeroList = new ArrayList<Variable>();
 
@@ -210,6 +211,7 @@ public class Formula {
                     counter = -1;
                     clauseCounter++;
 
+
                     break;
 
 
@@ -280,7 +282,7 @@ public class Formula {
 
 
         // if the size of the map is 2^n, the formula is NOT satisfiable.
-        if (variableList.size() == (1 << variables) ) {
+        if (totalTested == (1 << variables) ) {
 
             long endTime = System.currentTimeMillis() - startTime;
 
@@ -291,6 +293,11 @@ public class Formula {
             finishedTesting = true;
 
             System.out.println("Computed in: " + endTime + " ms");
+
+            vList.clear();;
+
+            clauseList.clear();
+
 
             return 0;
 
@@ -307,7 +314,7 @@ public class Formula {
 
             // full false are at index 0 of variableMap
             // adding assignments to map
-            variableList.add(mapCounter++, vList);
+            totalTested++;
 
             clauseCounter = 0;
 
@@ -329,6 +336,11 @@ public class Formula {
             System.out.println("Formula is true. Time taken: " + endTime + " ms");
 
             System.out.println(vList.toString());
+
+            vList.clear();;
+
+            clauseList.clear();
+
 
             return 1;
 
