@@ -27,7 +27,7 @@ import java.util.*;
 
 public class Formula {
 
-    ArrayList<Clause> clauseList = new ArrayList<Clause>();
+    ArrayList<Clause> clauseList = new ArrayList<>();
 
     Iterator<Clause> cListIt = clauseList.listIterator();
 
@@ -37,22 +37,17 @@ public class Formula {
 
     ListIterator<Variable> vListIterator = vList.listIterator();
 
-    // Creating a HashMap that will store variable assignments so that they will not be run more than once.
 
+    // Counting how many assignments have been generated.
     int totalTested = 0;
-
-
-    List<Variable>emptyList = new ArrayList<Variable>();
 
 
 
     List<Variable> noZeroList = new ArrayList<Variable>();
 
-    Variable var;
 
     Variable tempVar;
 
-    Variable clauseVar;
 
     Clause clause;
     int tempCounter;
@@ -63,7 +58,7 @@ public class Formula {
 
     int clauseCounter = 0;
 
-    int mapCounter = 0;
+
 
 
     long startTime;
@@ -72,7 +67,7 @@ public class Formula {
 
     int clauses;
 
-    int assignments;
+
 
     boolean truth = false;
 
@@ -90,6 +85,13 @@ public class Formula {
 
         Iterator<Variable> it = list.iterator();
 
+        /**
+         *
+         * Iterating through the list of integers, adding all values except for zeroes to the list.
+         *
+         * All values are removed from this list at the end.
+         */
+
         while (it.hasNext()) {
 
             Variable val = list.get(0);
@@ -101,7 +103,7 @@ public class Formula {
 
             } else {
 
-                List<Variable> temp = new ArrayList<Variable>(noZeroList);
+                List<Variable> temp = new ArrayList<>(noZeroList);
                 Clause c = new Clause(temp);
                 clauseList.add(c);
                 noZeroList.clear();
@@ -121,7 +123,7 @@ public class Formula {
         clauseList.add(c);
 
 
-        // a loop adding all variables (FALSE) to vList
+        // Starting assignment, all false.
         for (int i = 1; i < variables + 1; i++) {
 
             Variable v = new Variable(i - (i * 2));
@@ -146,13 +148,26 @@ public class Formula {
     }
 
 
+    /**
+     *
+     * Solves a formula by iterating through the variables in a clause, and comparing them to the variables in an assignment.
+     *
+     * If at least one variable matches, the clause is true.
+     * If no variables match, the clause is false.
+     *
+     * If one clause is false, the entire list of assignments does not work for the formula, thus making it the formula false and
+     * having to generate the next Assignment.
+     *
+     *
+     * @return 0 or 1, to break out of the method.
+     */
+
     public int solve() {
 
 
         // an iterator to keep track of all of our clauses in the formula.
         cListIt = clauseList.listIterator();
         clause = cListIt.next();
-
 
 
 
@@ -168,8 +183,6 @@ public class Formula {
 
 
         while (clauseCounter < clauses) {
-
-
 
 
 
@@ -202,19 +215,11 @@ public class Formula {
                     truth = false;
 
 
-                    clauseVarIt = clause.list.listIterator();
-
-                    clauseVar = clauseVarIt.next();
-
-                    vListIt = vList.iterator();
-
                     counter = -1;
                     clauseCounter++;
 
 
                     break;
-
-
 
 
                 } else
@@ -294,7 +299,7 @@ public class Formula {
 
             System.out.println("Computed in: " + endTime + " ms");
 
-            vList.clear();;
+            vList.clear();
 
             clauseList.clear();
 
@@ -337,7 +342,7 @@ public class Formula {
 
             System.out.println(vList.toString());
 
-            vList.clear();;
+            vList.clear();
 
             clauseList.clear();
 
@@ -352,7 +357,14 @@ public class Formula {
 
     }
 
-    private boolean nextAssignment() {
+    /**
+     *
+     * Get the next assignment, and recursively call solve.
+     *
+     *
+     * @return
+     */
+    private void nextAssignment() {
 
 
         addOne();
@@ -361,11 +373,22 @@ public class Formula {
 
 
 
-        return false;
-
 
     }
 
+    /**
+     *
+     * Generate the next assignment by doing binary addition, i.e.
+     *
+     * starting at 0000000
+     *
+     * 00000001
+     *
+     * 00000010
+     *
+     * 00000011... etc
+     *
+     */
 
     private void addOne() {
 

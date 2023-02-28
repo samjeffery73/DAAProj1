@@ -28,11 +28,9 @@ public class FileReader {
     int variables;
      int clauses;
     int next;
-    String filename;
+
     Scanner fileScan = null;
     String line;
-
-    boolean truth = false;
 
     List<Variable> fullList = new ArrayList<Variable>();
 
@@ -45,11 +43,26 @@ public class FileReader {
 
     }
 
+
+    /**
+     *
+     * Checks a file to see if its valid. If it is,
+     *
+     * Iterate through the file, ignoring comment lines, gathering parameters, and putting all integers into a list.
+     *
+     * (I know that this is slower. My project would have greatly improved if I changed this, but due to time constraints and systems being built upon this,
+     * I wasn't able to fix without restructuring entire project.)
+     *
+     * File path is hardcoded, and should be adjusted to the given path.
+     *
+     * @param filename
+     * @throws FileNotFoundException
+     */
     public void checkFile(String filename) throws FileNotFoundException {
 
-        // hardcoded Filename, needs revision
+        // HARDCODED FILEPATH AND FILENAME!!!
        File readFile = new File("C:/Users/njhdt/Desktop/ROWAN CS 1 BOOKS/sem3/daa_inputs/" + filename + ".cnf");
-       //File readFile = new File("C:/Users/njhdt/OneDrive/Desktop/Rowan Files/DAA/DAAProjects/src/main/java/projecttwo/" + filename + ".cnf");
+
 
         try {
             fileScan = new Scanner(readFile);
@@ -107,6 +120,16 @@ public class FileReader {
 
 
     }
+
+    /**
+     *
+     * pre: p cnf line
+     *
+     * post: returns the parameters of the given input file.
+     *
+     * # of variables, and # of clauses.
+     *
+     */
 
     public void setParams() {
 
