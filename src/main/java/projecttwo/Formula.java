@@ -29,22 +29,28 @@ public class Formula {
 
     ArrayList<Clause> clauseList = new ArrayList<Clause>();
 
+    Iterator<Clause> cListIt = clauseList.listIterator();
+
 
     // creating a new list to keep track of the T/F values of the n amount of variables in the formula.
     ArrayList<Variable> vList = new ArrayList<Variable>();
 
+    ListIterator<Variable> vListIterator = vList.listIterator();
+
     // Creating a HashMap that will store variable assignments so that they will not be run more than once.
-    Map<Integer, ArrayList<Variable>> variableMap = new HashMap<Integer, ArrayList<Variable>>();
+    ArrayList<ArrayList<Variable>> variableList = new ArrayList<ArrayList<Variable>>();
 
 
     List<Variable> noZeroList = new ArrayList<Variable>();
 
     Variable var;
 
+    Variable tempVar;
+
     Variable clauseVar;
 
     Clause clause;
-
+    int tempCounter;
     int cursor;
 
     // counter for variables
@@ -52,7 +58,7 @@ public class Formula {
 
     int clauseCounter = 0;
 
-    int mapCounter = -1;
+    int mapCounter = 0;
 
 
     int variables;
@@ -120,26 +126,34 @@ public class Formula {
         }
 
 
-        System.out.println(vList.toString());
 
 
 
 
         solve();
+
+
+        while (!finishedTesting){
+
+            nextAssignment();
+
+
+            if (truth)
+                break;
+
+
+        }
     }
 
 
     public void solve() {
 
 
-        System.out.println("Using Assigments: " + vList);
-
-        System.out.println("Solving formula...");
 
 
         // an iterator to keep track of all of our clauses in the formula.
-        Iterator<Clause> cListIt = clauseList.listIterator();
-        Clause clause = cListIt.next();
+        cListIt = clauseList.listIterator();
+        clause = cListIt.next();
 
         // an iterator to keep track of the variables within each clause
         Iterator<Variable> clauseVarIt = clause.list.listIterator();
@@ -152,6 +166,13 @@ public class Formula {
 
 
         while (clauseCounter < clauses) {
+
+            if (truth) {
+
+                finishedTesting = true;
+                break;
+            }
+
 
             // end of vList, go to the next entry
             if (!vListIt.hasNext()) {
@@ -174,7 +195,6 @@ public class Formula {
 
                     truth = false;
 
-                    System.out.println(clause.toString() + " " + clause.truth);
 
 
                     clauseVarIt = clause.list.listIterator();
@@ -220,9 +240,14 @@ public class Formula {
 
                 }
 
-                else
+                else {
 
                     truth = true;
+                    break;
+
+
+                }
+
 
 
             }
@@ -239,29 +264,31 @@ public class Formula {
 
 
 
-        // if the size is not yet 2^n, and truth is also still false,
-        if (!finishedTesting && !truth) {
 
-            // full false are at index 0 of variableMap
-            // adding assignments to map
-            variableMap.put(mapCounter++, vList);
-
-            clauseCounter = 0;
-
-            nextAssignment();
-
-
-
-        }
 
         // if the size of the map is 2^n, the formula is NOT satisfiable.
-        if (variableMap.size() == (2 << clauses) - 1 ) {
+        if (variableList.size() == (2 << variables) ) {
 
-            System.out.println(this.toString() + " is NOT satisfiable.");
+            System.out.println("Formula is NOT satisfiable.");
 
             truth = false;
 
-            boolean finishedTesting = true;
+            finishedTesting = true;
+
+
+
+
+        }
+
+
+        // if the size is not yet 2^n, and truth is also still false,
+        if ((!truth && !finishedTesting)) {
+
+            // full false are at index 0 of variableMap
+            // adding assignments to map
+            variableList.add(mapCounter++, vList);
+
+            clauseCounter = 0;
 
 
         }
@@ -269,64 +296,60 @@ public class Formula {
 
 
 
+
+
+        else {
+
             truth = true;
+
+            finishedTesting = true;
 
             System.out.println("Formula is true with assignment " + vList.toString());
 
 
+        }
+
 
     }
 
-    private void nextAssignment() {
-
-        Variable tempVar = new Variable(0);
-
-        // New assignment list, tempList, which is Vlist to binary plus one.
-        ArrayList<Variable> tempList = new ArrayList<Variable>(vList);
-
-
-
+    private boolean nextAssignment() {
 
 
         addOne();
 
-
         solve();
+
+
+
+        return false;
+
 
     }
 
 
     private void addOne() {
 
-        int tempCounter = 0;
-
-        ArrayList<Variable> tempList = new ArrayList<Variable>(vList);
-
-        Variable tempVar = new Variable(0);
-
-
         // Iterate starting at the LAST value of the list.
-        ListIterator<Variable> tempListIterator = tempList.listIterator(tempList.size() - 1);
+
+        vListIterator = vList.listIterator(vList.size() - 1);
 
 
+        tempVar = vList.get(vList.size()-1);
 
-
-
-        tempVar = tempListIterator.next();
 
 
         //Right most 0, flip it to a 1
         // All the 1s to the right, turns to 0s
 
-        while (tempListIterator.hasPrevious() || tempListIterator.hasNext()) {
+        while (vListIterator.hasPrevious() || vListIterator.hasNext()) {
+
 
             // if the previous value is = 0, and the value before that one is also not a 1,
             if (tempVar.binaryVal == 0) {
 
                 // flip the sign, set the binary value to 1, making variable true.
-                tempList.set(tempList.indexOf(tempVar), new Variable (tempVar.value * -1));
+                vList.set(vList.indexOf(tempVar), new Variable (tempVar.value * -1));
 
-                vList = tempList;
 
                 break;
 
@@ -337,7 +360,7 @@ public class Formula {
 
                     tempCounter++;
 
-                    tempList.set(tempList.indexOf(tempVar), new Variable ((tempVar.value * -1)));
+                    vList.set(vList.indexOf(tempVar), new Variable ((tempVar.value * -1)));
 
 
 
@@ -345,7 +368,7 @@ public class Formula {
 
                 while (tempCounter >= 0) {
 
-                    tempVar = tempListIterator.previous();
+                    tempVar = vListIterator.previous();
                     tempCounter--;
 
 
@@ -364,7 +387,11 @@ public class Formula {
 
 
 
+
+
     }
+
+
 
 
     }

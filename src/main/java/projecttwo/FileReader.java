@@ -73,7 +73,7 @@ public class FileReader {
 
             // getting all the values
 
-            if (line.contains("p cnf")) {
+            else if (line.contains("p cnf")) {
 
                 line = line.replaceAll("[^0-9]"," ");
 
@@ -85,11 +85,18 @@ public class FileReader {
 
             }
 
-            fullList.add(new Variable(next));
-            next = fileScan.nextInt();
+            else {
+
+                fullList.add(new Variable(next));
+
+                next = fileScan.nextInt();
+
+            }
+
 
         }
 
+        fileScan.close();
 
         System.out.println("Generating formula...");
         Formula f = new Formula(fullList, variables, clauses);
