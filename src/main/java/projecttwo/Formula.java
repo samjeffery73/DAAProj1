@@ -309,6 +309,8 @@ public class Formula {
 
             System.out.println("Formula is true. Time taken: " + endTime + " ms");
 
+            System.out.println(vList.toString());
+
             return 1;
 
 
@@ -375,8 +377,24 @@ public class Formula {
 
                 while (tempCounter >= 0) {
 
-                    tempVar = vListIterator.previous();
-                    tempCounter--;
+
+                    if (!vListIterator.hasPrevious()) {
+
+                        tempVar = vListIterator.next();
+                        tempCounter--;
+
+                        break;
+
+
+                    }
+
+                    else {
+                        tempVar = vListIterator.previous();
+
+                        tempCounter--;
+
+                    }
+
 
 
                 }
@@ -388,6 +406,8 @@ public class Formula {
 
 
         }
+
+
 
 
 
