@@ -304,6 +304,11 @@ public class Formula {
             clauseList.clear();
 
 
+            vList.clear();;
+
+
+            clauseList.clear();
+
             return 0;
 
 
@@ -346,6 +351,11 @@ public class Formula {
 
             clauseList.clear();
 
+
+            vList.clear();;
+
+
+            clauseList.clear();
 
             return 1;
 
