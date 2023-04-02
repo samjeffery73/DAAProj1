@@ -59,8 +59,23 @@ public class Sudoku {
 
         toString();
 
+        toSAT();
 
 
+
+
+
+
+
+
+
+    }
+
+    /**
+     * Create a CNF SAT formula from this Sudoku puzzle.
+     */
+
+    private void toSAT() {
 
         // skipping initial parameters
         for (int i = 0; i < 2; i++) {
@@ -70,24 +85,36 @@ public class Sudoku {
 
 
 
+        int r = 1; // starting row number
+        int c = 1; // starting column number
         while (intScan.hasNext()) {
 
             value = intScan.nextInt();
 
+            if (c > columns) {
+
+                r++;
+                c=1;
+            }
+
+            Variable v = new Variable(r, c, value);
+
+            if (v.value > 0) {
+
+                createClauses(v);
+
+
+            }
 
 
         }
-
-
-
-
     }
 
-    /**
-     * Create a SAT from this Sudoku puzzle.
+    /** Create clauses based on the restrictions of Sudoku.
+     *
+     * @param A positive literal ( a true variable )
      */
-
-    private void toSAT(Variable v) {
+    private void createClauses(Variable v) {
 
         rowClauses(v);
         colClauses(v);
@@ -101,6 +128,8 @@ public class Sudoku {
     private void rowClauses(Variable v) {
 // TODO build this algo
         // For each number 1-9, we will have clauses that make sure that number is included.
+
+
         // For each number 1-9, we will have clauses that assures there is only one present.
 
 
