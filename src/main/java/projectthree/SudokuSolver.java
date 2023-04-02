@@ -1,27 +1,29 @@
 package projectthree;
 
-import org.sat4j.specs.*;
-import org.sat4j.core.*;
-import org.sat4j.reader.*;
-import org.sat4j.minisat.*;
+import org.sat4j.minisat.SolverFactory;
+import org.sat4j.reader.DimacsReader;
+import org.sat4j.reader.Reader;
+import org.sat4j.specs.ISolver;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
 
-public class Main {
+public class SudokuSolver {
 
 
-   // public static void main (String args[]) throws FileNotFoundException {
+    public static void main (String args[]) throws FileNotFoundException {
+
+        ISolver solver = SolverFactory.newDefault();
+
+        Reader reader = new DimacsReader(solver);
+
+        Sudoku sudOne = new Sudoku("puz1");
 
 
-       // FileReader file = new FileReader("puz1");
 
 
+    }
 
-    //}
-
-    public static void main(String[] args) {
+  /**  public static void main(String[] args) {
 
 
         ISolver solver = SolverFactory.newDefault();
@@ -48,7 +50,7 @@ public class Main {
         } catch (TimeoutException e) {
             System.out.println("Timeout, sorry!");
         }
-    }
+    } **/
 }
 
 
