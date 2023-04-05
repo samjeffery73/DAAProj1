@@ -8,8 +8,7 @@ import java.util.*;
 
 public class Sudoku {
     final long startTime = System.nanoTime();
-
-    List<Variable> list = new ArrayList<>();
+    int clauses;
 
     int rows;
 
@@ -36,7 +35,7 @@ public class Sudoku {
     public Sudoku(String filename) throws FileNotFoundException {
 
         // HARDCODED FILEPATH!! TODO
-        File readFile = new File("C:/Users/njhdt/OneDrive/Desktop/Rowan Files/DAA/DAAProjects/src/main/java/projectthree/" + filename);
+        File readFile = new File("C:/Users/njhdt/OneDrive/Desktop/Rowan Files/DAA/DAAProjects/out/" + filename);
 
 
         try {
@@ -47,11 +46,11 @@ public class Sudoku {
         }
 
 
-        gridSize = fileScan.nextInt(); // let gridsize be i
+        gridSize = fileScan.nextInt(); // let gridsize be h
 
-        rows = gridSize * gridSize; // rows be j
+        rows = gridSize * gridSize; // rows be i
 
-        columns = rows; // columns be k
+        columns = rows; // columns be j
 
         variablesNeeded = rows * rows * rows;
 
@@ -59,7 +58,25 @@ public class Sudoku {
 
         toString();
 
+        try {
+
+            File cnfFile = new File("sudokuCNF.cnf");
+
+            cnfFile.createNewFile();
+
+            FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf");
+
+        }
+
+
+
+        catch(IOException e) {
+            System.err.println("Error.");
+        }
+
         toSAT();
+
+
 
 
 
@@ -77,6 +94,28 @@ public class Sudoku {
 
     private void toSAT() {
 
+        try {
+
+            File cnfFile = new File("sudokuCNF.cnf");
+
+            cnfFile.createNewFile();
+
+            FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
+
+            cnfWriter.write("c This is the cnf file.");
+            cnfWriter.write("\np cnf " + variablesNeeded + "\n");
+
+
+            cnfWriter.flush();
+
+
+        }
+
+
+        catch(IOException e) {
+            System.err.println("Error.");
+        }
+
         // skipping initial parameters
         for (int i = 0; i < 2; i++) {
 
@@ -87,6 +126,7 @@ public class Sudoku {
 
         int r = 1; // starting row number
         int c = 1; // starting column number
+
         while (intScan.hasNext()) {
 
             value = intScan.nextInt();
@@ -101,36 +141,115 @@ public class Sudoku {
 
             if (v.value > 0) {
 
-                createClauses(v);
-
+                literalClause(v);
 
             }
 
+            c++;
 
         }
+
+        setConstraints();
+
+
+
+
+
+
+
     }
 
     /** Create clauses based on the restrictions of Sudoku.
      *
-     * @param A positive literal ( a true variable )
+     * @param  v (a positive literal) ( a true variable )
      */
-    private void createClauses(Variable v) {
+    private void literalClause(Variable v) {
 
-        rowClauses(v);
-        colClauses(v);
-        boxClauses(v);
+
+        // Creating single clauses from each variable given.
+
+        try {
+
+            FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
+
+            cnfWriter.append(v.ijk + " 0\n");
+
+            negate(v);
+
+            clauses++;
+
+            cnfWriter.flush();
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+    /**
+     *
+     * Set up sudoku constraints by creating clauses
+     */
+    private void setConstraints() {
+
+
+
+        rowClauses();
+
+        colClauses();
+
+        gridClauses();
 
     }
 
     /**
      * Create clauses based on row restrictions.
      */
-    private void rowClauses(Variable v) {
-// TODO build this algo
-        // For each number 1-9, we will have clauses that make sure that number is included.
+    private void rowClauses() {
+
+        try {
+
+            FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
+
+            // Each variable must be present at least once in each row.
+            for (int i = 1; i <= rows; i++) {
+
+                for (int j = 1; j<=columns; j++) {
+
+                    for (int k = 1; k <= columns; k++) {
+
+                        String s = i + "" + j + "" +  k + "" + " ";
+                        cnfWriter.append(s);
+                        cnfWriter.flush();
+                    }
+
+                    cnfWriter.append("0");
+                    cnfWriter.append("\n");
+
+                    clauses++;
+
+                }
 
 
-        // For each number 1-9, we will have clauses that assures there is only one present.
+            }
+
+
+            cnfWriter.close();
+
+
+        }
+
+
+        catch (IOException e) {
+
+
+        }
+
+
+
+
 
 
     }
@@ -138,10 +257,52 @@ public class Sudoku {
     /**
      * Create clauses based on column restrictions.
      */
-    private void colClauses(Variable v) {
+    private void colClauses() {
 
-        // For each number 1-9, we will make sure that each number is included.
-        // For each number 1-9, we will make sure that there is only one present.
+        String s = "";
+
+
+
+        try {
+
+
+            FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
+
+            // Each variable must be present at least once in each column
+            for (int j = 1; j <= columns; j++) {
+
+                for (int i = 1; i<=rows; i++) {
+
+                    for (int k = 1; k <= columns; k++) {
+
+                        s = i + "" + j + "" +  k + "" + " ";
+                        cnfWriter.append(s);
+                        cnfWriter.flush();
+
+                    }
+
+                        cnfWriter.append("0");
+                        cnfWriter.append("\n");
+                        cnfWriter.flush();
+
+                        clauses++;
+
+                }
+
+
+            }
+
+
+            cnfWriter.close();
+
+
+        }
+
+
+        catch (IOException e) {
+
+
+        }
 
     }
 
@@ -149,24 +310,134 @@ public class Sudoku {
      * Create clauses based on box restrictions.
      *
      */
-    private void boxClauses(Variable v) {
+    private void gridClauses() {
 
-        // For each number 1-9 we will make sure each number is included.
+        String s = "";
+        try {
 
-        // For each number 1-9, we will make sure that there is only one present in each box.
+            FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
+
+            // For each number 1-9, we will make sure that there is at least one present in each box.
+
+            // The sub grid -- Horizontal movement
+            for (int h = 0; h < gridSize; h++) {
+
+                // Sub grid -- Vertical Movement
+                for (int g = 0; g < gridSize; g++) {
+
+                    for (int k = 1; k <= columns; k++) {
+
+                        for (int i = gridSize * h + 1; i <= gridSize * h + gridSize; i++) {
+
+                            for (int j = gridSize * g + 1; j <= gridSize * g + 3; j++) {
 
 
+                                s = i + "" + j + "" + k + "";
+                                cnfWriter.append(s + " ");
+                                cnfWriter.flush();
+
+
+
+                            }
+
+                            cnfWriter.append("0");
+
+                            clauses++;
+
+                            if (!(s.equals("999"))) {
+
+                                cnfWriter.append("\n");
+                                cnfWriter.flush();
+
+                            }
+
+
+                        }
+
+
+
+
+                    }
+
+                }
+
+            }
+
+            cnfWriter.flush();
+
+
+        }
+
+        catch(IOException e){
+
+
+            }
+
+        }
+
+
+    /**
+     * Given one POSITVE LITERAL variable x<i,j,k>,
+     *
+     * Negate variables that are NOT POSSIBLE.
+     *
+     * @param v
+     */
+
+    private void negate(Variable v) {
+
+        int rowLoc = v.rowLoc;
+        int colLoc = v.colLoc;
+        int kValue = v.value;
+
+        String s = "";
+
+
+
+
+        try {
+
+            FileWriter cnfWriter = new FileWriter ("sudokuCNF.cnf", true);
+
+            for (int j = 1; j <= columns; j++) {
+
+                if (j == v.colLoc) {
+
+                    j++;
+
+                }
+
+
+
+
+
+                cnfWriter.append("-" + rowLoc * 100 + j *10 + kValue + " 0\n");
+
+                cnfWriter.flush();
+
+            }
+
+
+        }
+
+        catch (IOException e) {
+
+        }
     }
 
 
 
 
+
+@Override
     public String toString() {
 
 
+        String s = "";
+
         for (int i = 0; i < 2; i++) {
 
-            line = fileScan.nextLine();
+            fileScan.nextLine();
         }
 
         System.out.println("Full Sudoku:");
@@ -174,17 +445,15 @@ public class Sudoku {
         while (fileScan.hasNext()) {
 
 
-            line = fileScan.nextLine();
-
-
-            System.out.println(line);
+            System.out.println(fileScan.nextLine());
 
 
         }
 
+
         fileScan.close();
 
-        return "";
+        return s;
 
 
     }

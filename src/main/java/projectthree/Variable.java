@@ -39,9 +39,13 @@ public class Variable {
         this.value = value;
 
 
+
+
         if (value > 0) {
 
             int ijk = rowLoc * 100 + colLoc * 10 + value;
+
+            this.ijk = ijk;
 
             this.truth = true;
         }
