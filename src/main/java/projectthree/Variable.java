@@ -43,7 +43,7 @@ public class Variable {
 
         if (value > 0) {
 
-            int ijk = rowLoc * 100 + colLoc * 10 + value;
+            int ijk = (rowLoc * 100 )+ (colLoc * 10) + value;
 
             this.ijk = ijk;
 

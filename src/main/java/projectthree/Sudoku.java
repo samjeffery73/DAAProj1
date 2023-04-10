@@ -102,8 +102,8 @@ public class Sudoku {
 
             FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
 
-            cnfWriter.write("c This is the cnf file.");
-            cnfWriter.write("\np cnf " + variablesNeeded + "\n");
+           // cnfWriter.write("c This is the cnf file.");
+          //  cnfWriter.write("\np cnf " + variablesNeeded + "\n");
 
 
             cnfWriter.flush();
@@ -387,7 +387,6 @@ public class Sudoku {
     private void negate(Variable v) {
 
         int rowLoc = v.rowLoc;
-        int colLoc = v.colLoc;
         int kValue = v.value;
 
         String s = "";
@@ -411,7 +410,7 @@ public class Sudoku {
 
 
 
-                cnfWriter.append("-" + rowLoc * 100 + j *10 + kValue + " 0\n");
+                cnfWriter.append("-" + ((rowLoc * 100) + (j *10) + kValue + " 0\n"));
 
                 cnfWriter.flush();
 
