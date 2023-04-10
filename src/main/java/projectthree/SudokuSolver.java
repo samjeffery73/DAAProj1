@@ -28,6 +28,7 @@ public class SudokuSolver {
 
 
 
+
             try {
 
                 PrintWriter out = new PrintWriter("sudokuCNF.cnf");

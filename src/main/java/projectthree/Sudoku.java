@@ -106,7 +106,10 @@ public class Sudoku {
            // cnfWriter.write("c This is the cnf file.");
           //  cnfWriter.write("\np cnf " + variablesNeeded + "\n");
 
+            cnfWriter.append("c LITERALS\n");
 
+
+            cnfWriter.close();
             cnfWriter.flush();
 
 
@@ -161,7 +164,12 @@ public class Sudoku {
 
     }
 
-    /** Create clauses based on the restrictions of Sudoku.
+    /** Create clauses for positive literals.
+     * I.e.
+     * Given row 1 column 1, value 5
+     *
+     * Add a singular clause "115 0"
+     *
      *
      * @param  v (a positive literal) ( a true variable )
      */
@@ -174,7 +182,11 @@ public class Sudoku {
 
             FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
 
+
+
             cnfWriter.append(v.ijk + " 0\n");
+
+
 
             negate(v);
 
@@ -182,12 +194,66 @@ public class Sudoku {
 
             cnfWriter.flush();
 
+            cnfWriter.close();
+
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
 
+
+
+    }
+
+    /**
+     * Given one POSITVE LITERAL variable x<i,j,k>,
+     *
+     * Negate variables that are NOT POSSIBLE.
+     *
+     * @param v
+     */
+
+    private void negate(Variable v) {
+
+        int rowLoc = v.rowLoc;
+        int kValue = v.value;
+
+
+        String s = "";
+
+
+
+
+        try {
+
+            FileWriter cnfWriter = new FileWriter ("sudokuCNF.cnf", true);
+
+
+
+            for (int j = 1; j <= columns; j++) {
+
+                if (j == v.colLoc) {
+
+                    j++;
+
+                }
+
+
+                cnfWriter.append("-" + ((rowLoc * 100) + (j *10) + kValue + " 0\n"));
+
+                cnfWriter.flush();
+
+            }
+
+            cnfWriter.close();
+
+
+        }
+
+        catch (IOException e) {
+
+        }
     }
 
     /**
@@ -209,22 +275,153 @@ public class Sudoku {
     }
 
     /**
-     * Create clauses based on ROw Restrictions.
+     * Create clauses based on Row Restrictions.
      * AT LEAST one value in each cell.
      *
      *
      */
     private void rowClauses() {
 
+        String s = "";
 
+        try {
+
+
+            FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
+            cnfWriter.append("c ROW CLAUSES\n");
+
+
+            for (int k = 1; k <= columns; k++) {
+
+                for (int i = 1; i<=rows; i++) {
+
+                    for (int j = 1; j <= columns; j++) {
+
+                        s = i + "" + j + "" +  k + "" + " ";
+                        cnfWriter.append(s);
+                        cnfWriter.flush();
+
+                    }
+
+                    cnfWriter.append("0\n");
+                    cnfWriter.flush();
+
+                    clauses++;
+
+                }
+
+
+            }
+
+
+            cnfWriter.close();
+
+
+        }
+
+
+        catch (IOException e) {
+
+
+        }
+
+
+
+
+
+        atMostRow();
 
 
 
 
     }
+    /**
+     * Create clauses based on Row Restrictions.
+     *
+     * AT MOST one of each value in a row.
+     *
+     *
+     */
+
+    private void atMostRow() {
+
+        int next;
+
+
+        try {
+
+
+            FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
+
+
+            for (int i = 1; i<= rows; i++) {
+
+                for (int k = 1; k<= columns; k++) {
+
+                    for (int j = 1; j<= columns; j++) {
+
+                        int start = ((i * 100) + (j * 10) + k) * -1; // start = 111;
+
+
+
+                        for (int z = 1; z<= columns; z++) {
+
+                            if (z <= j) {
+
+                                z = j+1;
+
+                                if (z == 10) {
+
+                                    break;
+                                }
+
+                            }
+
+
+                            next = ((i * 100) + (z * 10) + k) * -1;
+
+
+
+                            for (int x = 0; x < 1; x++) {
+
+                                if (next == -999 && start == -999) {
+
+                                    break;
+                                }
+
+                                cnfWriter.append(start + " " + next + " 0\n");
+                                cnfWriter.flush();
+                                clauses++;
+
+
+
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+
+            }
+
+
+
+
+
+        }
+
+        catch (IOException e) {
+
+        }
+
+
+    }
 
     /**
-     * Create clauses based on row restrictions.
+     * Create clauses based on CELL restrictions.
      *
      * AT LEAST one value in each cell.
      *
@@ -234,6 +431,7 @@ public class Sudoku {
         try {
 
             FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
+            cnfWriter.append("c CELL CLAUSES\n");
 
 
             for (int i = 1; i <= rows; i++) {
@@ -279,6 +477,14 @@ public class Sudoku {
 
 
     }
+
+
+    /**
+     * Create clauses based on CELL restrictions.
+     *
+     * AT MOST one value in each cell.
+     *
+     */
 
     private void atMostCell() {
 
@@ -356,15 +562,11 @@ public class Sudoku {
 
 
 
-
-
-
-
-
     }
 
     /**
      * Create clauses based on column restrictions.
+     * AT LEAST one value in each column.
      */
     private void colClauses() {
 
@@ -376,13 +578,14 @@ public class Sudoku {
 
 
             FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
+            cnfWriter.append("c COLUMN CLAUSES\n");
 
             // Each variable must be present at least once in each column
-            for (int j = 1; j <= columns; j++) {
+            for (int k = 1; k <= columns; k++) {
 
-                for (int i = 1; i<=rows; i++) {
+                for (int j = 1; j<=rows; j++) {
 
-                    for (int k = 1; k <= columns; k++) {
+                    for (int i = 1; i <= columns; i++) {
 
                         s = i + "" + j + "" +  k + "" + " ";
                         cnfWriter.append(s);
@@ -412,6 +615,96 @@ public class Sudoku {
 
 
         }
+
+        atMostCol();
+
+    }
+
+    /**
+     *
+     * Create clauses based on column restrictions.
+     *
+     * AT MOST one value in each column.
+     *
+     */
+    private void atMostCol() {
+
+
+        int next;
+
+
+        try {
+
+
+            FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
+
+
+            for (int i = 1; i<= rows; i++) {
+
+                for (int j = 1; j<= columns; j++) {
+
+                    for (int k = 1; k<= columns; k++) {
+
+                        int start = ((i * 100) + (j * 10) + k) * -1; // start = 111;
+
+
+
+                        for (int z = 1; z<= columns; z++) {
+
+                            if (z <= k) {
+
+                                z = k+1;
+
+                                if (z == 10) {
+
+                                    break;
+                                }
+
+                            }
+
+
+                            next = ((z * 100) + (j * 10) + k) * -1;
+
+
+
+                            for (int x = 0; x < 1; x++) {
+
+                                if (next == -999 && start == -999) {
+
+                                    break;
+                                }
+
+                                cnfWriter.append(start + " " + next + " 0\n");
+                                cnfWriter.flush();
+                                clauses++;
+
+
+
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+
+            }
+
+
+
+
+
+        }
+
+        catch (IOException e) {
+
+        }
+
+
+
+
 
     }
 
@@ -485,53 +778,7 @@ public class Sudoku {
         }
 
 
-    /**
-     * Given one POSITVE LITERAL variable x<i,j,k>,
-     *
-     * Negate variables that are NOT POSSIBLE.
-     *
-     * @param v
-     */
 
-    private void negate(Variable v) {
-
-        int rowLoc = v.rowLoc;
-        int kValue = v.value;
-
-        String s = "";
-
-
-
-
-        try {
-
-            FileWriter cnfWriter = new FileWriter ("sudokuCNF.cnf", true);
-
-            for (int j = 1; j <= columns; j++) {
-
-                if (j == v.colLoc) {
-
-                    j++;
-
-                }
-
-
-
-
-
-                cnfWriter.append("-" + ((rowLoc * 100) + (j *10) + kValue + " 0\n"));
-
-                cnfWriter.flush();
-
-            }
-
-
-        }
-
-        catch (IOException e) {
-
-        }
-    }
 
 
 
