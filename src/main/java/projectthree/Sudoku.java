@@ -23,7 +23,6 @@ public class Sudoku {
     Scanner fileScan;
 
     Scanner intScan;
-    String line;
 
 
 
@@ -35,7 +34,8 @@ public class Sudoku {
     public Sudoku(String filename) throws FileNotFoundException {
 
         // HARDCODED FILEPATH!! TODO
-        File readFile = new File("C:/Users/njhdt/OneDrive/Desktop/Rowan Files/DAA/DAAProjects/out/" + filename);
+       //  LAPTOP!!!!  File readFile = new File("C:/Users/njhdt/OneDrive/Desktop/Rowan Files/DAA/DAAProjects/out/" + filename);
+        File readFile = new File("C:/Users/njhdt/Desktop/ROWAN CS 1 BOOKS/sem3/daa_inputs/inputs/" + filename);
 
 
         try {
@@ -53,6 +53,7 @@ public class Sudoku {
         columns = rows; // columns be j
 
         variablesNeeded = rows * rows * rows;
+        
 
         System.out.println("Sudoku is size: " + rows + " x " + columns);
 
@@ -152,6 +153,7 @@ public class Sudoku {
         setConstraints();
 
 
+        System.out.println("Done");
 
 
 
@@ -191,29 +193,49 @@ public class Sudoku {
     /**
      *
      * Set up sudoku constraints by creating clauses
+     * Each method has a sub-method for AT-MOST clauses.
      */
     private void setConstraints() {
 
-
-
         rowClauses();
+
+        cellClauses();
 
         colClauses();
 
         gridClauses();
 
+
+    }
+
+    /**
+     * Create clauses based on ROw Restrictions.
+     * AT LEAST one value in each cell.
+     *
+     *
+     */
+    private void rowClauses() {
+
+
+
+
+
+
     }
 
     /**
      * Create clauses based on row restrictions.
+     *
+     * AT LEAST one value in each cell.
+     *
      */
-    private void rowClauses() {
+    private void cellClauses() {
 
         try {
 
             FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
 
-            // Each variable must be present at least once in each row.
+
             for (int i = 1; i <= rows; i++) {
 
                 for (int j = 1; j<=columns; j++) {
@@ -239,6 +261,8 @@ public class Sudoku {
             cnfWriter.close();
 
 
+
+
         }
 
 
@@ -246,6 +270,91 @@ public class Sudoku {
 
 
         }
+
+        atMostCell();
+
+
+
+
+
+
+    }
+
+    private void atMostCell() {
+
+        int next;
+
+
+        try {
+
+
+            FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
+
+
+            for (int i = 1; i<= rows; i++) {
+
+                for (int j = 1; j<= columns; j++) {
+
+                    for (int k = 1; k<= columns; k++) {
+
+                        int start = ((i * 100) + (j * 10) + k) * -1; // start = 111;
+
+
+
+                        for (int z = 1; z<= columns; z++) {
+
+                            if (z <= k) {
+
+                                z = k+1;
+
+                                if (z == 10) {
+
+                                    break;
+                                }
+
+                            }
+
+
+                            next = ((i * 100) + (j * 10) + z) * -1;
+
+
+
+                            for (int x = 0; x < 1; x++) {
+
+                                if (next == -999 && start == -999) {
+
+                                    break;
+                                }
+
+                                cnfWriter.append(start + " " + next + " 0\n");
+                                cnfWriter.flush();
+                                clauses++;
+
+
+
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+
+            }
+
+
+
+
+
+        }
+
+        catch (IOException e) {
+
+        }
+
+
 
 
 
