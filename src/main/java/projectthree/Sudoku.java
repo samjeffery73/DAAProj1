@@ -24,18 +24,15 @@ public class Sudoku {
 
     Scanner intScan;
 
-
-
-
-
+    String data = "";
 
 
 
     public Sudoku(String filename) throws FileNotFoundException {
 
         // HARDCODED FILEPATH!! TODO
-       //  LAPTOP!!!!  File readFile = new File("C:/Users/njhdt/OneDrive/Desktop/Rowan Files/DAA/DAAProjects/out/" + filename);
-        File readFile = new File("C:/Users/njhdt/Desktop/ROWAN CS 1 BOOKS/sem3/daa_inputs/inputs/" + filename);
+         File readFile = new File("C:/Users/njhdt/OneDrive/Desktop/Rowan Files/DAA/DAAProjects/out/" + filename);
+        //  LAPTOP!!!! File readFile = new File("C:/Users/njhdt/Desktop/ROWAN CS 1 BOOKS/sem3/daa_inputs/inputs/" + filename);
 
 
         try {
@@ -103,16 +100,15 @@ public class Sudoku {
 
             cnfFile.createNewFile();
 
-            FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
-
-           // cnfWriter.write("c This is the cnf file.");
-          //  cnfWriter.write("\np cnf " + variablesNeeded + "\n");
-
-            cnfWriter.append("c LITERALS\n");
 
 
-            cnfWriter.close();
-            cnfWriter.flush();
+
+
+
+
+            data = data + "c LITERALS\n";
+
+
 
 
         }
@@ -143,9 +139,11 @@ public class Sudoku {
                 c=1;
             }
 
-            Variable v = new Variable(r, c, value);
 
-            if (v.value > 0) {
+
+            if (value > 0) {
+
+                Variable v = new Variable(r, c, value);
 
                 literalClause(v);
 
@@ -157,8 +155,24 @@ public class Sudoku {
 
         setConstraints();
 
+        data = "p cnf " + variablesNeeded + " " + clauses + "\n" + data;
 
-        System.out.println("Done");
+
+        try {
+
+            FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
+
+            cnfWriter.write(data);
+            cnfWriter.flush();
+            cnfWriter.close();
+
+        }
+
+        catch (IOException e) {
+
+        }
+
+
 
 
 
@@ -186,11 +200,9 @@ public class Sudoku {
 
 
 
-            cnfWriter.append(v.ijk + " 0\n");
+            data = data + (encode(v.rowLoc,v.colLoc,v.value)) + " 0\n";
 
 
-
-            negate(v);
 
             clauses++;
 
@@ -214,7 +226,7 @@ public class Sudoku {
      * Negate variables that are NOT POSSIBLE.
      *
      * @param v
-     */
+
 
     private void negate(Variable v) {
 
@@ -242,7 +254,7 @@ public class Sudoku {
                 }
 
 
-                cnfWriter.append("-" + ((rowLoc * 100) + (j *10) + kValue + " 0\n"));
+                data = data + ("-" + ((rowLoc * 100) + (j *10) + kValue + " 0\n"));
 
                 cnfWriter.flush();
 
@@ -257,6 +269,7 @@ public class Sudoku {
 
         }
     }
+    **/
 
     /**
      *
@@ -272,6 +285,20 @@ public class Sudoku {
         colClauses();
 
         gridClauses();
+
+        try {
+
+            FileWriter cnfWriter = new FileWriter ("sudokuCNF.cnf", true);
+
+            data = data + "c END OF FILE";
+            cnfWriter.flush();
+            cnfWriter.close();
+
+        }
+
+        catch(IOException e) {
+
+        }
 
 
     }
@@ -290,7 +317,7 @@ public class Sudoku {
 
 
             FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
-            cnfWriter.append("c ROW CLAUSES\n");
+            data = data + "c ROW CLAUSES\n";
 
 
             for (int k = 1; k <= columns; k++) {
@@ -299,13 +326,13 @@ public class Sudoku {
 
                     for (int j = 1; j <= columns; j++) {
 
-                        s = i + "" + j + "" +  k + "" + " ";
-                        cnfWriter.append(s);
+                        s = encode(i,j,k) + " ";
+                        data = data + s;
                         cnfWriter.flush();
 
                     }
 
-                    cnfWriter.append("0\n");
+                    data = data + "0\n";
                     cnfWriter.flush();
 
                     clauses++;
@@ -362,7 +389,7 @@ public class Sudoku {
 
                     for (int j = 1; j<= columns; j++) {
 
-                        int start = ((i * 100) + (j * 10) + k) * -1; // start = 111;
+                        int start = encode(i,j,k) * -1; // start = 111;
 
 
 
@@ -380,7 +407,10 @@ public class Sudoku {
                             }
 
 
-                            next = ((i * 100) + (z * 10) + k) * -1;
+                            next = encode(i,z,k) * -1;
+
+                            negatedClause c = new negatedClause(start, next);
+
 
 
 
@@ -391,7 +421,7 @@ public class Sudoku {
                                     break;
                                 }
 
-                                cnfWriter.append(start + " " + next + " 0\n");
+                                data = data + (start + " " + next + " 0\n");
                                 cnfWriter.flush();
                                 clauses++;
 
@@ -433,7 +463,7 @@ public class Sudoku {
         try {
 
             FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
-            cnfWriter.append("c CELL CLAUSES\n");
+            data = data + ("c CELL CLAUSES\n");
 
 
             for (int i = 1; i <= rows; i++) {
@@ -442,13 +472,12 @@ public class Sudoku {
 
                     for (int k = 1; k <= columns; k++) {
 
-                        String s = i + "" + j + "" +  k + "" + " ";
-                        cnfWriter.append(s);
-                        cnfWriter.flush();
+                        String s = encode(i,j,k) + " ";
+                        data = data + s;
+
                     }
 
-                    cnfWriter.append("0");
-                    cnfWriter.append("\n");
+                    data = data + "0\n";
 
                     clauses++;
 
@@ -505,7 +534,7 @@ public class Sudoku {
 
                     for (int k = 1; k<= columns; k++) {
 
-                        int start = ((i * 100) + (j * 10) + k) * -1; // start = 111;
+                        int start = encode(i,j,k) * -1; // start = 111;
 
 
 
@@ -523,7 +552,14 @@ public class Sudoku {
                             }
 
 
-                            next = ((i * 100) + (j * 10) + z) * -1;
+                            next = (encode(i,j,z)) * -1;
+
+
+
+
+                            negatedClause neg = new negatedClause(start, next);
+
+
 
 
 
@@ -534,7 +570,7 @@ public class Sudoku {
                                     break;
                                 }
 
-                                cnfWriter.append(start + " " + next + " 0\n");
+                                data = data + (start + " " + next + " 0\n");
                                 cnfWriter.flush();
                                 clauses++;
 
@@ -580,7 +616,7 @@ public class Sudoku {
 
 
             FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
-            cnfWriter.append("c COLUMN CLAUSES\n");
+            data = data + ("c COLUMN CLAUSES\n");
 
             // Each variable must be present at least once in each column
             for (int k = 1; k <= columns; k++) {
@@ -589,14 +625,13 @@ public class Sudoku {
 
                     for (int i = 1; i <= columns; i++) {
 
-                        s = i + "" + j + "" +  k + "" + " ";
-                        cnfWriter.append(s);
+                        s = encode(i,j,k) + " ";
+                        data = data + (s);
                         cnfWriter.flush();
 
                     }
 
-                        cnfWriter.append("0");
-                        cnfWriter.append("\n");
+                        data = data + ("0\n");
                         cnfWriter.flush();
 
                         clauses++;
@@ -678,7 +713,7 @@ public class Sudoku {
                                     break;
                                 }
 
-                                cnfWriter.append(start + " " + next + " 0\n");
+                                data = data + (start + " " + next + " 0\n");
                                 cnfWriter.flush();
                                 clauses++;
 
@@ -724,7 +759,7 @@ public class Sudoku {
 
             FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
 
-            cnfWriter.append("c GRID CLAUSES\n");
+            data = data + ("c GRID CLAUSES\n");
 
             // For each number 1-9, we will make sure that there is at least one present in each box.
 
@@ -742,19 +777,19 @@ public class Sudoku {
 
 
                                 s = i + "" + j + "" + k + "";
-                                cnfWriter.append(s + " ");
+                                data = data + (s + " ");
                                 cnfWriter.flush();
 
 
 
                             }
 
-                            cnfWriter.append("0");
+                            data = data + ("0");
 
                             clauses++;
 
 
-                            cnfWriter.append("\n");
+                            data = data + ("\n");
                             cnfWriter.flush();
 
 
@@ -812,7 +847,7 @@ public class Sudoku {
 
                                 for (int j = gridSize * d + 1; j <= gridSize * d + 3; j++) {
 
-                                    int start = ((i * 100) + (j * 10) + k) * -1; // start = 111;
+                                    int start = encode(i,j,k) * -1; // start = 111;
 
 
                                     for (int z = gridSize * o + 1; z <= gridSize * o + gridSize; z++) {
@@ -825,6 +860,13 @@ public class Sudoku {
 
                                                 h = j + 1;
 
+
+                                                if (z< i ) {
+
+                                                    z = i;
+
+                                                }
+
                                                 if (h > gridSize * d + gridSize) {
 
                                                     break;
@@ -836,7 +878,7 @@ public class Sudoku {
 
 
 
-                                            next = ((z * 100) + (h * 10) + k) * -1;
+                                            next = encode(z,h,k) * -1;
 
 
                                             for (int x = 0; x < 1; x++) {
@@ -846,7 +888,9 @@ public class Sudoku {
                                                     break;
                                                 }
 
-                                                cnfWriter.append(start + " " + next + " 0\n");
+
+
+                                                data = data + (start + " " + next + " 0\n");
                                                 cnfWriter.flush();
                                                 clauses++;
 
@@ -909,6 +953,15 @@ public class Sudoku {
 
         return s;
 
+
+    }
+
+
+    private int encode(int i, int j, int k) {
+
+        // return (i * (columns * columns) +( j * columns) + (k + 1));
+
+        return (i * (100) +( j * 10) + (k));
 
     }
 

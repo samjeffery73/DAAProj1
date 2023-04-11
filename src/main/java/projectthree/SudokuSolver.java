@@ -31,9 +31,9 @@ public class SudokuSolver {
 
             try {
 
-                PrintWriter out = new PrintWriter("sudokuCNF.cnf");
 
                 IProblem problem = reader.parseInstance("sudokuCNF.cnf");
+
                 if (problem.isSatisfiable()) {
                     System.out.println("Satisfiable !");
                     reader.decode(problem.model());
@@ -50,6 +50,7 @@ public class SudokuSolver {
                 // TODO Auto-generated catch block
             } catch (ContradictionException e) {
                 System.out.println("Unsatisfiable (trivial)!");
+
             } catch (TimeoutException e) {
                 System.out.println("Timeout, sorry!");
             }

@@ -2,7 +2,7 @@ package projectthree;
 
 public class Variable {
 
-    int rowLoc, colLoc, value, ijk;
+    int rowLoc, colLoc, value;
 
     boolean truth = false;
 
@@ -39,16 +39,6 @@ public class Variable {
         this.value = value;
 
 
-
-
-        if (value > 0) {
-
-            int ijk = (rowLoc * 100 )+ (colLoc * 10) + value;
-
-            this.ijk = ijk;
-
-            this.truth = true;
-        }
 
 
 
