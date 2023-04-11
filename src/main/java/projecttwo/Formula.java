@@ -343,7 +343,7 @@ public class Formula {
 
             finishedTesting = true;
 
-            System.out.println("Formula is true. Time taken: " + endTime + " ms");
+            System.out.println("Formula is SAT. Time taken: " + endTime + " ms");
 
             System.out.println(vList.toString());
 

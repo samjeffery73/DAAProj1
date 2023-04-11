@@ -65,7 +65,6 @@ public class Sudoku {
 
             cnfFile.createNewFile();
 
-            FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf");
 
         }
 
@@ -76,6 +75,9 @@ public class Sudoku {
         }
 
         toSAT();
+
+
+
 
 
 
@@ -639,11 +641,11 @@ public class Sudoku {
             FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
 
 
-            for (int i = 1; i<= rows; i++) {
+            for (int k = 1; k<= rows; k++) {
 
                 for (int j = 1; j<= columns; j++) {
 
-                    for (int k = 1; k<= columns; k++) {
+                    for (int i = 1; i<= columns; i++) {
 
                         int start = ((i * 100) + (j * 10) + k) * -1; // start = 111;
 
@@ -651,19 +653,21 @@ public class Sudoku {
 
                         for (int z = 1; z<= columns; z++) {
 
-                            if (z <= k) {
+                             if (z <= i) {
 
-                                z = k+1;
+                                z = i + 1;
+                            }
 
                                 if (z == 10) {
 
                                     break;
                                 }
 
-                            }
+
 
 
                             next = ((z * 100) + (j * 10) + k) * -1;
+
 
 
 
@@ -715,9 +719,12 @@ public class Sudoku {
     private void gridClauses() {
 
         String s = "";
+
         try {
 
             FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
+
+            cnfWriter.append("c GRID CLAUSES\n");
 
             // For each number 1-9, we will make sure that there is at least one present in each box.
 
@@ -746,12 +753,11 @@ public class Sudoku {
 
                             clauses++;
 
-                            if (!(s.equals("999"))) {
 
-                                cnfWriter.append("\n");
-                                cnfWriter.flush();
+                            cnfWriter.append("\n");
+                            cnfWriter.flush();
 
-                            }
+
 
 
                         }
@@ -767,6 +773,7 @@ public class Sudoku {
 
             cnfWriter.flush();
 
+            atMostGrid();
 
         }
 
@@ -783,6 +790,98 @@ public class Sudoku {
 
 
 
+        public void atMostGrid() {
+
+            int next;
+
+
+            try {
+
+
+                FileWriter cnfWriter = new FileWriter("sudokuCNF.cnf", true);
+
+
+                for (int o = 0; o < gridSize; o++) {
+
+                    // Sub grid -- Vertical Movement
+                    for (int d = 0; d < gridSize; d++) {
+
+                        for (int k = 1; k <= rows; k++) {
+
+                            for (int i = gridSize * o + 1; i <= gridSize * o + gridSize; i++) {
+
+                                for (int j = gridSize * d + 1; j <= gridSize * d + 3; j++) {
+
+                                    int start = ((i * 100) + (j * 10) + k) * -1; // start = 111;
+
+
+                                    for (int z = gridSize * o + 1; z <= gridSize * o + gridSize; z++) {
+
+
+                                        for (int h = gridSize * d + 1;  h <= gridSize * d + gridSize; h++) {
+
+
+                                            if (h <= j && z <= i) {
+
+                                                h = j + 1;
+
+                                                if (h > gridSize * d + gridSize) {
+
+                                                    break;
+
+                                                }
+
+                                            }
+
+
+
+
+                                            next = ((z * 100) + (h * 10) + k) * -1;
+
+
+                                            for (int x = 0; x < 1; x++) {
+
+                                                if (next == -999 && start == -999) {
+
+                                                    break;
+                                                }
+
+                                                cnfWriter.append(start + " " + next + " 0\n");
+                                                cnfWriter.flush();
+                                                clauses++;
+
+
+                                            }
+
+                                        }
+
+                                    }
+
+                                }
+
+
+                            }
+
+
+                        }
+                    }
+                }
+            }
+
+            catch (IOException e) {
+
+            }
+
+
+
+
+
+
+
+
+
+
+        }
 
 @Override
     public String toString() {

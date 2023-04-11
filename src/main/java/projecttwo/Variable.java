@@ -52,17 +52,19 @@ public class Variable {
     }
 
 
+    /**
+     * Determine if two variables are equal by looking at their value.
+     *
+     * @param var
+     * @return true, if the values are equal.
+     *
+     */
     public boolean equals(Variable var) {
 
         if (var.value == this.value) {
 
             return true;
 
-        }
-
-        if (var == null) {
-
-            return false;
         }
 
         return false;
