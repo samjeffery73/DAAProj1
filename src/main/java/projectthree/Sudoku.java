@@ -210,6 +210,8 @@ public class Sudoku {
 
                         String tempClause = encode(i+1,j+1,sudArray[i][j]) + " 0";
 
+                        // Add Some sort if indicator that this position should be at position i-a
+
                         clauseList.add(tempClause);
 
                     }
@@ -671,7 +673,7 @@ public class Sudoku {
 
         }
 
-        return temp + rows;
+        return temp + 1;
 
          //return (i-1) * 100 + (j-1) * 10 + k;
 

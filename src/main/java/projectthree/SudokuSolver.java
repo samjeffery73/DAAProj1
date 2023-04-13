@@ -18,6 +18,8 @@ public class SudokuSolver {
 
     public static void main (String args[]) throws FileNotFoundException {
 
+        long startTime = System.currentTimeMillis();
+
         ISolver solver = SolverFactory.newDefault();
         solver.setTimeout(3600); // 1 hour timeout
 
@@ -62,6 +64,10 @@ public class SudokuSolver {
                 System.out.println("Timeout, sorry!");
             }
 
+            long endTime = System.currentTimeMillis() - startTime;
+
+            System.out.println("Time taken: " + endTime + "MS");
+
 
 
 
@@ -95,6 +101,8 @@ public class SudokuSolver {
       }
 
 
+
+
       return valueList;
 
 
@@ -123,10 +131,9 @@ public class SudokuSolver {
         while (!list.isEmpty()) {
 
             code = list.get(0);
-            code = code - sud.rows;
+            code = code - 1;
 
             int k = code % sud.rows;
-
 
 
             code /= sud.rows;
@@ -142,7 +149,7 @@ public class SudokuSolver {
 
             }
 
-            else if (!(j == 0)) {
+            if (!(j == 0)) {
 
                 j--;
             }
@@ -171,9 +178,6 @@ public class SudokuSolver {
 
 
       }
-
-      long endTime = System.currentTimeMillis() - sud.startTime;
-        System.out.println("Done in " +  (endTime - sud.startTime));
 
 
 
