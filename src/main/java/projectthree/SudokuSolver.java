@@ -25,8 +25,6 @@ public class SudokuSolver {
 
         Sudoku sudOne = new Sudoku("puz1");
 
-        int[][] completedSudoku;
-
 
 
             try {
@@ -115,20 +113,39 @@ public class SudokuSolver {
      */
   private static void decode(ArrayList<Integer> list, Sudoku sud) {
 
+
+      int code;
+
+
+
         int[][] fullSud = new int[sud.rows][sud.rows];
 
         while (!list.isEmpty()) {
 
-            int code = list.get(0);
-            int i = code / (sud.rows * sud.rows);
+            code = list.get(0);
+            code = code - sud.rows;
 
-            i--;
+            int k = code % sud.rows;
 
-           int j = (code / sud.rows) % sud.rows;
 
-           j--;
 
-           int k = code -  (((i+1) * (sud.rows * sud.rows)) + ((j+1) * sud.rows));
+            code /= sud.rows;
+
+            int j = code % sud.rows;
+
+            int i = code / sud.rows;
+
+
+            if (!(i == 0)) {
+
+                i--;
+
+            }
+
+            else if (!(j == 0)) {
+
+                j--;
+            }
 
 
             fullSud[i][j] = k;

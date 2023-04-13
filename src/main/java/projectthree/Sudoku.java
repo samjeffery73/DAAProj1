@@ -149,7 +149,11 @@ public class Sudoku {
                 bf.append(clauseList.get(i) + "\n");
 
             }
+
+
+            bf.append("c END");
             bf.flush();
+
             cnfWriter.close();
             bf.close();
 
@@ -158,10 +162,6 @@ public class Sudoku {
         catch (IOException e) {
 
         }
-
-
-
-
 
 
 
@@ -208,7 +208,7 @@ public class Sudoku {
 
                     if (sudArray[i][j] != 0) {
 
-                        String tempClause = encode(i,j,sudArray[i][j]) + " 0";
+                        String tempClause = encode(i+1,j+1,sudArray[i][j]) + " 0";
 
                         clauseList.add(tempClause);
 
@@ -361,7 +361,6 @@ public class Sudoku {
         String tempClause;
 
 
-
             for (int i = 1; i<= rows; i++) {
 
                 for (int j = 1; j<= columns; j++) {
@@ -411,7 +410,7 @@ public class Sudoku {
 
                     tempclause = "";
 
-                    for (int i = 1; i <= columns; i++) {
+                    for (int i = 1; i <= rows; i++) {
 
                         tempclause += encode(i,j,k) + " ";
 
@@ -475,6 +474,9 @@ public class Sudoku {
      */
     private void gridClauses() {
 
+        int tempI;
+        int tempJ;
+
 
         String tempclause;
 
@@ -482,21 +484,22 @@ public class Sudoku {
 
 
         // The sub grid -- Horizontal movement
-        for (int h = 0; h < gridSize; h++) {
+        for (int h = 1; h <= rows; h+= gridSize) {
 
+            tempI = (h + (gridSize -1)) / gridSize;
 
             // Sub grid -- Vertical Movement
-            for (int g = 0; g < gridSize; g++) {
+            for (int g = 1; g <= rows; g+= gridSize) {
 
+                tempJ = (g + (gridSize -1)) / gridSize;
 
                 for (int k = 1; k <= columns; k++) {
 
                     tempclause = "";
 
-                    for (int i = gridSize * h + 1; i <= gridSize * h + gridSize; i++) {
+                    for (int i = h; i <= gridSize * tempI; i++) {
 
-                        for (int j = gridSize * g + 1; j <= gridSize * g + gridSize;  j++) {
-
+                        for (int j = g; j <= gridSize * tempJ;  j++) {
 
                             tempclause += encode(i,j,k) + " ";
 
@@ -508,8 +511,6 @@ public class Sudoku {
 
                     tempclause+= "0";
                     clauseList.add(tempclause);
-
-
 
 
                 }
@@ -533,67 +534,61 @@ public class Sudoku {
 // TODO, this is not working properly.
         public void atMostGrid() {
 
+        int start;
+        int next;
+
 
            String tempclause;
 
                 // For each number 1-9, we will make sure that there is at least one present in each box.
 
-                // The sub grid -- Horizontal movement
+                // The sub grid -- Horizontal movement -- sub grids I
                 for (int h = 0; h < gridSize; h++) {
-
-
-                    // Sub grid -- Vertical Movement
+                    // Sub grid -- Vertical Movement -- sub grids J
                     for (int g = 0; g < gridSize; g++) {
 
 
                         for (int k = 1; k <= columns; k++) {
 
-                            for (int i = gridSize * h + 1; i <= gridSize * h + gridSize; i++) {
+                            for (int i = gridSize * h + 1; i <= (h + 1) * gridSize; i++) {
 
-                                for (int j = gridSize * g + 1; j <= gridSize * g + gridSize; j++) {
+                                for (int j = gridSize * g + 1; j <= (g+1) * gridSize; j++) {
 
-
-                                    int start = (encode(i,j,k) * -1);
-
-                                    for (int x = gridSize * h + 1; x<= gridSize * h + gridSize; x++) {
-
-                                        for (int z = gridSize * g + 1; z<= gridSize * g + gridSize; z++) {
-
-                                            int next = encode(x,z,k) * -1;
+                                    for (int x = j +1; x <= (g+1) * gridSize; x++) {
 
 
+                                        tempclause = "";
 
-                                            if (start == next) {
+                                        start = encode(i,j,k) * -1;
+                                        next = encode(i,x,k) * -1;
 
-                                                if (x == i) {
+                                        tempclause += start + " " + next + " 0";
 
-                                                    z++;
-
-                                                }
-
-                                                else {
-
-                                                    x++;
-
-                                                }
-
-                                                next = encode(x,z,k) * -1;
+                                        clauseList.add(tempclause);
 
 
-                                            }
+                                    }
 
+
+                                    for (int y = i + 1; y <= (h+1) * gridSize; y++) {
+
+                                        for (int z = g * gridSize + 1; z <= (g+1) * gridSize; z++) {
 
                                             tempclause = "";
+
+                                            start = encode(i,j,k) * -1;
+                                            next = encode(y,z,k) * -1;
 
                                             tempclause += start + " " + next + " 0";
 
                                             clauseList.add(tempclause);
 
+
                                         }
 
 
-
                                     }
+
 
 
 
@@ -663,7 +658,22 @@ public class Sudoku {
      */
     private int encode(int i, int j, int k) {
 
-         return ((i+1) * (columns * columns)) +( (j+1) * columns) + (k) ;
+
+
+
+         int temp = ((rows * rows) * (i)) + (rows * (j)) + (k);
+
+       // int temp = (100 * (i+1)) + (10 * (j+1)) + k;
+
+        if (temp < 0) {
+
+            temp *= -1;
+
+        }
+
+        return temp + rows;
+
+         //return (i-1) * 100 + (j-1) * 10 + k;
 
 
     }
@@ -672,4 +682,3 @@ public class Sudoku {
 
 
 }
-
