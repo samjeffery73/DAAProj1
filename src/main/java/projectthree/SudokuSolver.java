@@ -29,6 +29,8 @@ public class SudokuSolver {
 
 
 
+
+
             try {
 
 
@@ -128,19 +130,19 @@ public class SudokuSolver {
 
         int[][] fullSud = new int[sud.rows][sud.rows];
 
+
         while (!list.isEmpty()) {
 
             code = list.get(0);
-            code = code - 1;
 
-            int k = code % sud.rows;
+            int k = code % sud.encodeVal;
 
 
-            code /= sud.rows;
+            code /= sud.encodeVal;
 
-            int j = code % sud.rows;
+            int j = code % sud.encodeVal;
 
-            int i = code / sud.rows;
+            int i = code / sud.encodeVal;
 
 
             if (!(i == 0)) {

@@ -17,6 +17,8 @@ public class Sudoku {
 
     int rows;
 
+    int encodeVal;
+
     int gridSize;
 
     int columns;
@@ -54,7 +56,11 @@ public class Sudoku {
 
         columns = rows;
 
+        encodeVal = rows+1;
+
         variablesNeeded = rows * rows * rows;
+
+
 
         sudArray = new int [rows][columns];
 
@@ -206,11 +212,11 @@ public class Sudoku {
 
                 for (int j = 0; j < rows; j++) {
 
+                    String tempClause = "";
+
                     if (sudArray[i][j] != 0) {
 
-                        String tempClause = encode(i+1,j+1,sudArray[i][j]) + " 0";
-
-                        // Add Some sort if indicator that this position should be at position i-a
+                        tempClause = encode(i+1,j+1,sudArray[i][j]) + " 0";
 
                         clauseList.add(tempClause);
 
@@ -552,9 +558,9 @@ public class Sudoku {
 
                         for (int k = 1; k <= columns; k++) {
 
-                            for (int i = gridSize * h + 1; i <= (h + 1) * gridSize; i++) {
+                            for (int i = gridSize * (h + 1); i <= (h + 1) * gridSize; i++) {
 
-                                for (int j = gridSize * g + 1; j <= (g+1) * gridSize; j++) {
+                                for (int j = gridSize * (g + 1); j <= (g+1) * gridSize; j++) {
 
                                     for (int x = j +1; x <= (g+1) * gridSize; x++) {
 
@@ -661,21 +667,13 @@ public class Sudoku {
     private int encode(int i, int j, int k) {
 
 
+         int code = ((encodeVal * encodeVal) * (i)) + (encodeVal * (j)) + (k);
 
 
-         int temp = ((rows * rows) * (i)) + (rows * (j)) + (k);
 
-       // int temp = (100 * (i+1)) + (10 * (j+1)) + k;
 
-        if (temp < 0) {
+        return code;
 
-            temp *= -1;
-
-        }
-
-        return temp + 1;
-
-         //return (i-1) * 100 + (j-1) * 10 + k;
 
 
     }
