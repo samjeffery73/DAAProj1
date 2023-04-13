@@ -47,7 +47,6 @@ public class negatedClause {
 
         this.index = index;
 
-
         return index;
 
 
